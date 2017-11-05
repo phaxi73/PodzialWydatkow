@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Podzial Wydatkow</string>
+    <string name="zarejestruj_sie">Zarejestruj się</string>
+    <string name="nazwa_uzytkownika">Nazwa użytkownika</string>
+    <string name="haslo">Hasło</string>
+    <string name="email">Email</string>
 </resources>
