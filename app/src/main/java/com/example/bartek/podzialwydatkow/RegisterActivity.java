@@ -21,12 +21,12 @@ import org.w3c.dom.Text;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private android.support.v7.widget.Toolbar mToolbar;
+
     private TextInputLayout mDisplayName;
     private TextInputLayout mEmail;
     private TextInputLayout mPassword;
     private Button mCreateBtn;
-
-    private android.support.v7.widget.Toolbar mToolbar;
 
     //Proges
     private ProgressDialog mRegProgess;
@@ -62,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = mEmail.getEditText().getText().toString();
                 String password = mPassword.getEditText().getText().toString();
 
-                if(!TextUtils.isEmpty(display_name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+                if(!TextUtils.isEmpty(display_name) && display_name.length()>2 && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
                     mRegProgess.setTitle("Rejestracja użytkownika");
                     mRegProgess.setMessage("Proszę czekać...");
@@ -72,8 +72,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                 }
 
-                if(TextUtils.isEmpty(display_name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password))
-                Toast.makeText(RegisterActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
+                if(TextUtils.isEmpty(display_name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+
+                    Toast.makeText(RegisterActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
+
+                } else if (display_name.length()<3){
+
+                    Toast.makeText(RegisterActivity.this, "Nie można utworzyć konta, sprawdź poprawność wprowadzonych danych", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -91,13 +97,14 @@ public class RegisterActivity extends AppCompatActivity {
                     mRegProgess.dismiss();
 
                     Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Stworzenie nowego zadania i zamkniecie starego, zeby nie dalo wracac sie do StartActivity po zalogowaniu
                     startActivity(mainIntent);
                     finish();
 
                 } else {
 
                     mRegProgess.hide();
-                    Toast.makeText(RegisterActivity.this, "Wystąpił błąd, sprawdź poprawność wprowadzonych danych", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "Nie można utworzyć konta, sprawdź poprawność wprowadzonych danych", Toast.LENGTH_LONG).show();
 
                 }
 

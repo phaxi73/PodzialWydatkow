@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ProgressDialog mLoginProgress;
 
-    //Firebase
+    ////Firebase Autoryzacja
     private FirebaseAuth mAuth;
 
     @Override
@@ -35,9 +35,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Firebase Autoryzacja
         mAuth = FirebaseAuth.getInstance();
 
-        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.register_toolbar);
+        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.login_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Logowanie");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -64,12 +65,20 @@ public class LoginActivity extends AppCompatActivity {
                     loginUser(email, password);
 
                 }
+                if (TextUtils.isEmpty(email) && TextUtils.isEmpty(password)){
 
-                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
-
-                    Toast.makeText(LoginActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
+                   Toast.makeText(LoginActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
                 }
 
+                else if (TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+
+                    Toast.makeText(LoginActivity.this, "Wprowadź poprawny adres Email", Toast.LENGTH_LONG).show();
+                }
+
+                else if (!TextUtils.isEmpty(email) && TextUtils.isEmpty(password)){
+
+                    Toast.makeText(LoginActivity.this, "Wprowadź hasło", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -86,19 +95,19 @@ public class LoginActivity extends AppCompatActivity {
                 mLoginProgress.dismiss();
 
                 Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Stworzenie nowego zadania i zamkniecie starego, zeby nie dalo wracac sie do StartActivity po zalogowaniu
                 startActivity(mainIntent);
                 finish();
 
             } else {
 
                 mLoginProgress.hide();
-                Toast.makeText(LoginActivity.this, "Nie można zalogować, sprawdź poprawność wprowadzonych danych", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Wprowadzono nieprawidłowy login lub hasło, spróbuj ponownie", Toast.LENGTH_LONG).show();
             }
 
         }
     });
 
     }
-
 
 }

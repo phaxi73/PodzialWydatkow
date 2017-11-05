@@ -11,4 +11,7 @@
     <string name="rejestracja">Rejestracja</string>
     <string name="zaloguj_sie">Zaloguj się</string>
     <string name="zaloguj">Zaloguj</string>
+    <string name="has_o_min_6_znak_w">Hasło (min. 6 znaków)</string>
+    <string name="nazwa_u_ytkownika_min_3_znaki">Nazwa użytkownika (min. 3 znaki)</string>
+
 </resources>
