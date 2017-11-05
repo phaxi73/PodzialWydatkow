@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "650257815786",
+    "firebase_url": "https://podzialwydatkow.firebaseio.com",
+    "project_id": "podzialwydatkow",
+    "storage_bucket": "podzialwydatkow.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650257815786:android:1bc4642f547e3af9",
+        "android_client_info": {
+          "package_name": "com.example.bartek.podzialwydatkow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650257815786-9m6t8l4oh69jp2i3nos8saun58ndridg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bartek.podzialwydatkow",
+            "certificate_hash": "f26efc1d5c04e96aaf38b33d33000e5c5d7a2f1a"
+          }
+        },
+        {
+          "client_id": "650257815786-tunibq8u4cgamfahph7eslmnpuq1p270.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9d1j5lhE3HGtIIazgSCDPGrsaXjKrpDM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650257815786-tunibq8u4cgamfahph7eslmnpuq1p270.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
