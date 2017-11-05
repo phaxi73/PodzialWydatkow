@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Podział wydatków");
+        getSupportActionBar().setTitle("Strona Główna");
 
     }
 

@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email = mLoginEmail.getEditText().getText().toString();
                 String password = mLoginPassword.getEditText().getText().toString();
 
-                if(!TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
+                if(!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
                     mLoginProgress.setTitle("Logowanie");
                     mLoginProgress.setMessage("Proszę czekać...");
@@ -64,12 +64,18 @@ public class LoginActivity extends AppCompatActivity {
                     loginUser(email, password);
 
                 }
+
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
+
+                    Toast.makeText(LoginActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
     }
 
-    private void loginUser(String email, String password) {
+    private void loginUser(final String email, final String password) {
 
     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
         @Override
@@ -88,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                 mLoginProgress.hide();
                 Toast.makeText(LoginActivity.this, "Nie można zalogować, sprawdź poprawność wprowadzonych danych", Toast.LENGTH_LONG).show();
             }
+
         }
     });
 

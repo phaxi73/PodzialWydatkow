@@ -62,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = mEmail.getEditText().getText().toString();
                 String password = mPassword.getEditText().getText().toString();
 
-                if(!TextUtils.isEmpty(display_name) || !TextUtils.isEmpty(email) || !TextUtils.isEmpty(password)){
+                if(!TextUtils.isEmpty(display_name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
                     mRegProgess.setTitle("Rejestracja użytkownika");
                     mRegProgess.setMessage("Proszę czekać...");
@@ -71,6 +71,9 @@ public class RegisterActivity extends AppCompatActivity {
                     register_user(display_name, email, password);
 
                 }
+
+                if(TextUtils.isEmpty(display_name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password))
+                Toast.makeText(RegisterActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
 
             }
         });
