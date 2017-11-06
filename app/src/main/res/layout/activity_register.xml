@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bartek.podzialwydatkow.RegisterActivity">
+    tools:context="com.example.bartek.podzialwydatkow.RegisterActivity"
+    android:background="@color/colorPrimaryLight">
 
     <include
         android:id="@+id/register_toolbar"
@@ -20,6 +21,7 @@
         android:layout_width="346dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:textColorHint="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_toolbar">
@@ -35,6 +37,7 @@
         android:layout_width="346dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:textColorHint="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reg_email">
@@ -51,6 +54,7 @@
         android:layout_width="346dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:textColorHint="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reg_display_name">

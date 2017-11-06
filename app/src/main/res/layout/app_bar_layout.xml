@@ -7,6 +7,9 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
 
+
+    app:subtitleTextColor="@color/white"
+    app:titleTextColor="@color/white"
     tools:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
 
 </android.support.v7.widget.Toolbar>

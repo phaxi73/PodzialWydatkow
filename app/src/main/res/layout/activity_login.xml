@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bartek.podzialwydatkow.RegisterActivity">
+    tools:context="com.example.bartek.podzialwydatkow.RegisterActivity"
+    android:background="@color/colorPrimaryLight">
 
     <include
         android:id="@+id/login_toolbar"
@@ -33,7 +34,8 @@
         android:id="@+id/login_email"
         android:layout_width="346dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="64dp"
+        android:textColorHint="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_toolbar">
@@ -42,7 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColorLink="@color/white" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -50,6 +53,7 @@
         android:layout_width="346dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textColorHint="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_email">
@@ -58,7 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/haslo"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColorLink="@color/colorAccentLight" />
     </android.support.design.widget.TextInputLayout>
 
 </android.support.constraint.ConstraintLayout>
