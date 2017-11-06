@@ -62,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = mEmail.getEditText().getText().toString();
                 String password = mPassword.getEditText().getText().toString();
 
-                if(!TextUtils.isEmpty(display_name) && display_name.length()>2 && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+                if(!TextUtils.isEmpty(display_name) && display_name.length()>=3 && display_name.length()<=24 && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
                     mRegProgess.setTitle("Rejestracja użytkownika");
                     mRegProgess.setMessage("Proszę czekać...");
@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     Toast.makeText(RegisterActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
 
-                } else if (display_name.length()<3){
+                } else if (display_name.length()<3 || display_name.length()>24){
 
                     Toast.makeText(RegisterActivity.this, "Nie można utworzyć konta, sprawdź poprawność wprowadzonych danych", Toast.LENGTH_LONG).show();
                 }
