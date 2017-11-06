@@ -65,12 +65,12 @@ public class LoginActivity extends AppCompatActivity {
                     loginUser(email, password);
 
                 }
-                if (TextUtils.isEmpty(email) && TextUtils.isEmpty(password)){
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){
 
                    Toast.makeText(LoginActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
                 }
 
-                else if (TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+                /*/else if (TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
                     Toast.makeText(LoginActivity.this, "Wprowadź poprawny adres Email", Toast.LENGTH_LONG).show();
                 }
@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 else if (!TextUtils.isEmpty(email) && TextUtils.isEmpty(password)){
 
                     Toast.makeText(LoginActivity.this, "Wprowadź hasło", Toast.LENGTH_LONG).show();
-                }
+                }/*/
             }
         });
 
