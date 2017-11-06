@@ -25,6 +25,10 @@ class SectionsPagerAdapter extends FragmentPagerAdapter{
                 GroupsFragment groupsFragment = new GroupsFragment();
                 return groupsFragment;
 
+            case 2:
+                InvitesFragment invitesFragment = new InvitesFragment();
+                return invitesFragment;
+
             default:
                 return null;
         }
@@ -33,7 +37,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public int getCount() {       //liczba zakładek
-        return 2;
+        return 3;
     }
 
     public CharSequence getPageTitle(int position){
@@ -45,6 +49,9 @@ class SectionsPagerAdapter extends FragmentPagerAdapter{
 
             case 1:
                 return "GRUPY";
+
+            case 2:
+                return "ZAPROSZENIA";
 
             default:
                 return null;
