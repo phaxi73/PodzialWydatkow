@@ -45,7 +45,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:textColorLink="@color/white" />
+            android:textColor="@color/white"
+            android:textColorHint="@color/colorAccentLight" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -63,7 +64,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/haslo"
             android:inputType="textPassword"
-            android:textColorLink="@color/colorAccentLight" />
+            android:textColor="@color/white"
+            android:textColorHint="@color/colorAccentLight" />
     </android.support.design.widget.TextInputLayout>
 
 </android.support.constraint.ConstraintLayout>
