@@ -78,7 +78,7 @@
     <Button
         android:id="@+id/reg_create_btn"
         android:layout_width="150dp"
-        android:layout_height="54dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/colorAccent"
