@@ -21,11 +21,20 @@
             </intent-filter>
         </activity>
         <activity android:name=".StartActivity" />
+
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".StartActivity"/>
-        <activity android:name=".LoginActivity"
-            android:parentActivityName=".StartActivity"/>
+            android:parentActivityName=".StartActivity" />
+
+        <activity
+            android:name=".LoginActivity"
+            android:parentActivityName=".StartActivity" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity" />
+
+
     </application>
 
 </manifest>

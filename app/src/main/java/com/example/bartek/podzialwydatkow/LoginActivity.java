@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Logowanie");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mLoginProgress = new ProgressDialog(this);
+        mLoginProgress = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
 
         mLoginEmail = (TextInputLayout) findViewById(R.id.login_email);
         mLoginPassword = (TextInputLayout) findViewById(R.id.login_password);

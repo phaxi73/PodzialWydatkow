@@ -42,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
         //Firebase Autoryzacja
         mAuth = FirebaseAuth.getInstance();
 
-        mRegProgess = new ProgressDialog(this);
+        mRegProgess = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
 
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.register_toolbar);
         setSupportActionBar(mToolbar);
