@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mRegProgess = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
 
-        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.settings_toolbar);
+        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.register_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Rejestracja");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
