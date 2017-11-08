@@ -22,7 +22,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter{
                 return expensesFragment;
 
             case 1:
-                ExpensesFragment friendsFragment = new ExpensesFragment();
+                FriendsFragment friendsFragment = new FriendsFragment();
                 return friendsFragment;
 
             case 2:

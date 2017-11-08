@@ -9,16 +9,20 @@ public class Users {
     public String name;
     public String image;
     public String email;
+    public String thumb_image;
 
     public Users (){
 
     }
 
-    public Users(String name, String image, String email) {
+    public Users(String name, String image, String email) {  //Konstruktory
         this.name = name;
         this.image = image;
         this.email = email;
+        this.thumb_image = thumb_image;
     }
+
+    //Gettery i settery
 
     public String getName() {
         return name;
@@ -40,7 +44,15 @@ public class Users {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String thumb_image) {
         this.email = email;
+    }
+
+    public String getThumb_image() {
+        return thumb_image;
+    }
+
+    public void setThumb_image(String thumb_image) {
+        this.thumb_image = thumb_image;
     }
 }
