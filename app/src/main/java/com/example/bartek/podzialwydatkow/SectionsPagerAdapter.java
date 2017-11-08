@@ -18,12 +18,12 @@ class SectionsPagerAdapter extends FragmentPagerAdapter{
 
         switch(position){
             case 0:
-                FriendsFragment friendsFragment = new FriendsFragment();
-                return friendsFragment;
+                ExpensesFragment expensesFragment = new ExpensesFragment();
+                return expensesFragment;
 
             case 1:
-                GroupsFragment groupsFragment = new GroupsFragment();
-                return groupsFragment;
+                ExpensesFragment friendsFragment = new ExpensesFragment();
+                return friendsFragment;
 
             case 2:
                 InvitesFragment invitesFragment = new InvitesFragment();
@@ -45,10 +45,10 @@ class SectionsPagerAdapter extends FragmentPagerAdapter{
         switch (position){
 
             case 0:
-                return "ZNAJOMI";
+                return "WYDATKI";
 
             case 1:
-                return "GRUPY";
+                return "ZNAJOMI";
 
             case 2:
                 return "ZAPROSZENIA";

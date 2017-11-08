@@ -99,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //METODA - REJESTRACJA
-    private void register_user(final String display_name, String email, String password) {
+    private void register_user(final String display_name, final String email, String password) {
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -117,6 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                     userMap.put("name", display_name);
                     userMap.put("image", "default");
                     userMap.put("thumb_image", "default");
+                    userMap.put("email", email);
 
                     mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {  //Przekazuje obiekt do bazy danych (userMap)
                         @Override

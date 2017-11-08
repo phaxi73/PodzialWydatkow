@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        if(item.getItemId() == R.id.main_logout_btn){
+        if(item.getItemId() == R.id.main_logout_btn){      //Should've used switch here xD
 
             FirebaseAuth.getInstance().signOut();
             sendToStart();
