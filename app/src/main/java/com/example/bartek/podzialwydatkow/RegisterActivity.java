@@ -16,8 +16,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
+
+import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -33,6 +38,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Firebase Autoryzacja
     private FirebaseAuth mAuth;
+
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,8 @@ public class RegisterActivity extends AppCompatActivity {
         mPassword = (TextInputLayout) findViewById(R.id.reg_password);
         mCreateBtn = (Button) findViewById(R.id.reg_create_btn);
 
+
+        //PRZYCISK - REJESTRACJA
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,7 +95,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void register_user(String display_name, String email, String password) {
+    //METODA - REJESTRACJA
+    private void register_user(final String display_name, String email, String password) {
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -94,12 +104,33 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if(task.isSuccessful()){
 
-                    mRegProgess.dismiss();
+                    FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                    String uid = current_user.getUid();
 
-                    Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Stworzenie nowego zadania i zamkniecie starego, zeby nie dalo wracac sie do StartActivity po zalogowaniu
-                    startActivity(mainIntent);
-                    finish();
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid); //Główny węzeł -> Users -> UID
+
+                    //Utworzenie userMap
+                    HashMap<String, String> userMap = new HashMap<>();
+                    userMap.put("name", display_name);
+                    userMap.put("image", "default");
+                    userMap.put("thumb_image", "default");
+
+                    mDatabase.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {  //Przekazuje obiekt do bazy danych (userMap)
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if (task.isSuccessful()){
+
+                                mRegProgess.dismiss();
+
+                                Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //Stworzenie nowego zadania i zamkniecie starego, zeby nie dalo wracac sie do StartActivity po zalogowaniu
+                                startActivity(mainIntent);
+                                finish();
+                            }
+
+                        }
+                    });
 
                 } else {
 
