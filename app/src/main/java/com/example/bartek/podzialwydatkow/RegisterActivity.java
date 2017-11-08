@@ -16,6 +16,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -87,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 } else if (display_name.length()<3 || display_name.length()>24){
 
-                    Toast.makeText(RegisterActivity.this, "Nie można utworzyć konta, sprawdź poprawność wprowadzonych danych", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "Nie można utworzyć konta:\nNazwa użytkownika musi składać się z 3-24 znaków\nHasło musi mieć min. 6 znaków", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -135,7 +138,20 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
 
                     mRegProgess.hide();
-                    Toast.makeText(RegisterActivity.this, "Nie można utworzyć konta, sprawdź poprawność wprowadzonych danych", Toast.LENGTH_LONG).show();
+                    String error = "";
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthWeakPasswordException e) {
+                        error = "Hasło jest zbyt krótkie!";
+                    } catch (FirebaseAuthInvalidCredentialsException e) {
+                        error = "Niepoprawny adres Email!";
+                    } catch (FirebaseAuthUserCollisionException e) {
+                        error = "Konto o podanym adresie Email już istnieje!";
+                    } catch (Exception e) {
+                        error = "Nieznany błąd!";
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
 
                 }
 

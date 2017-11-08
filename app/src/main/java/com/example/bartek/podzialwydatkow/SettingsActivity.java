@@ -86,7 +86,11 @@ public class SettingsActivity extends AppCompatActivity {
                 String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 mName.setText(name);
-                Picasso.with(SettingsActivity.this).load(image).into(mDisplayImage);
+                if(!image.equals("default")){ //Jeżeli użytkownik nie dodał swojego obrazu, wyświetl obraz domyślny
+
+                    Picasso.with(SettingsActivity.this).load(image).into(mDisplayImage);
+
+                }
             }
 
             @Override
