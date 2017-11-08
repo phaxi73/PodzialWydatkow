@@ -70,15 +70,6 @@ public class LoginActivity extends AppCompatActivity {
                    Toast.makeText(LoginActivity.this, "Wprowadź brakujące dane", Toast.LENGTH_LONG).show();
                 }
 
-                /*/else if (TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
-
-                    Toast.makeText(LoginActivity.this, "Wprowadź poprawny adres Email", Toast.LENGTH_LONG).show();
-                }
-
-                else if (!TextUtils.isEmpty(email) && TextUtils.isEmpty(password)){
-
-                    Toast.makeText(LoginActivity.this, "Wprowadź hasło", Toast.LENGTH_LONG).show();
-                }/*/
             }
         });
 

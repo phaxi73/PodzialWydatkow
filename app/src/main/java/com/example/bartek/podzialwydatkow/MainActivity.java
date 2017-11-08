@@ -1,12 +1,15 @@
 package com.example.bartek.podzialwydatkow;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,23 +51,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser(); //bierze usera z Firebase i zapisuje w zmiennej currentUser
+        // Sprawdza czy użytkownik jest już zalogowany i od razu aktualizuje interfejs.
+        FirebaseUser currentUser = mAuth.getCurrentUser(); //Pobiera usera z Firebase i zapisuje w zmiennej currentUser
 
         if(currentUser == null ){       //jeśli currentUser == null, to znaczy, ze jest wylogowany i przenosze go do strony logowania
 
             sendToStart();
-            
 
         }
     }
 
-    private void sendToStart() {
+    private void sendToStart() {   //Metoda przenosząca do startActivity
         Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
         startActivity(startIntent);
         finish();
     }
 
+    //Menu w górnym prawym rogu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -91,7 +94,25 @@ public class MainActivity extends AppCompatActivity {
             startActivity(settingsIntent);
         }
 
+        if(item.getItemId() == R.id.main_users_btn){
+
+            Intent settingsIntent = new Intent(MainActivity.this, UsersActivity.class);
+            startActivity(settingsIntent);
+        }
+
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setTitle("Wyjście")
+                .setIcon(R.drawable.ic_warning_purple_48dp)
+                .setMessage("Czy na pewno chcesz wyjść z aplikacji?")
+                .setNegativeButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                }).setPositiveButton("Nie", null).show();
+    }
 }
