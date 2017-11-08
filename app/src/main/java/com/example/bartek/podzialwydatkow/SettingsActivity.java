@@ -2,6 +2,7 @@ package com.example.bartek.podzialwydatkow;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -29,10 +30,15 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -86,9 +92,10 @@ public class SettingsActivity extends AppCompatActivity {
                 String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 mName.setText(name);
-                if(!image.equals("default")){ //Jeżeli użytkownik nie dodał swojego obrazu, wyświetl obraz domyślny
 
-                    Picasso.with(SettingsActivity.this).load(image).into(mDisplayImage);
+                if(!image.equals("default")){ //Ladowanie obrazue (żeli użytkownik nie dodał swojego obrazu, wyświetl obraz domyślny)
+
+                    Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.account_icon_orange).into(mDisplayImage);
 
                 }
             }
@@ -126,6 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
             CropImage.activity(imageUri)
                     .setFixAspectRatio(true)
                     .setAspectRatio(1,1)
+                    .setMinCropWindowSize(500,500)
                     .start(this );
 
         }
@@ -145,9 +153,23 @@ public class SettingsActivity extends AppCompatActivity {
 
                 Uri resultUri = result.getUri();
 
+                File thumb_filePath = new File(resultUri.getPath());
+
                 String current_user_id = mCurrentUser.getUid();
 
-                StorageReference filepath = mImageStorage.child("profile_images").child(current_user_id + ".jpg");  //Używam random generatora
+                Bitmap thumb_bitmap = new Compressor(this)                                                         //Kompresja obrazu do miniaturek
+                        .setMaxWidth(200)
+                        .setMaxHeight(200)
+                        .setQuality(75)
+                        .compressToBitmap(thumb_filePath);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();                                                //Przechowywanie miniaturek w Firebase
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] thumb_byte = baos.toByteArray();
+
+                StorageReference filepath = mImageStorage.child("profile_images").child(current_user_id + ".jpg");       //Przechowywanie obrazu pod nazwą UID
+                final StorageReference thumb_filepath = mImageStorage.child("profile_images").child("thumbs").child(current_user_id + ".jpg"); //Przechowywanie miniaturki obrazu pod nazwą UID
+
 
                 filepath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -155,21 +177,46 @@ public class SettingsActivity extends AppCompatActivity {
 
                         if(task.isSuccessful()){
 
-                          String download_url = task.getResult().getDownloadUrl().toString();
+                          final String download_url = task.getResult().getDownloadUrl().toString();                     //Download Url dla obrazu użytkownika
 
-                          mUserDatabase.child("image").setValue(download_url).addOnCompleteListener(new OnCompleteListener<Void>() {
-                              @Override
-                              public void onComplete(@NonNull Task<Void> task) {
+                            UploadTask uploadTask = thumb_filepath.putBytes(thumb_byte);
+                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
 
-                                  if(task.isSuccessful()){
+                                    String thumb_download_url = thumb_task.getResult().getDownloadUrl().toString();     //Download Url dla miniaturki obrazu
 
-                                      mProgressDialog.dismiss();
-                                      Toast.makeText(SettingsActivity.this, "Obraz został załadowany", Toast.LENGTH_LONG).show();
+                                    if(thumb_task.isSuccessful()){
 
-                                  }
+                                        Map update_hashMap = new HashMap();                                             //Aktualizacja obrazów w Firebase
+                                        update_hashMap.put("image", download_url);
+                                        update_hashMap.put("thumb_image", thumb_download_url);
 
-                              }
-                          });
+                                        mUserDatabase.updateChildren(update_hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                                if(task.isSuccessful()){
+
+                                                    mProgressDialog.dismiss();
+                                                    Toast.makeText(SettingsActivity.this, "Obraz został załadowany", Toast.LENGTH_LONG).show();
+
+                                                }
+
+                                            }
+                                        });
+
+                                    }else {
+
+                                        Toast.makeText(SettingsActivity.this, "Wystąpił błąd, nie załadowano miniaturki obrazu", Toast.LENGTH_LONG).show();
+                                        mProgressDialog.dismiss();
+
+                                    }
+
+                                }
+                            });
+
+
 
                         } else {
 

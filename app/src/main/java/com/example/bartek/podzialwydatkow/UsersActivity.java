@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 public class UsersActivity extends AppCompatActivity {
 
@@ -55,6 +58,7 @@ public class UsersActivity extends AppCompatActivity {
             protected void populateViewHolder(UsersViewHolder usersViewHolder, Users users, int i) {
 
                 usersViewHolder.setName(users.getName());  //Pobiera name z Users.java
+                usersViewHolder.setUserEmail(users.getEmail());
 
             }
         };
@@ -63,7 +67,7 @@ public class UsersActivity extends AppCompatActivity {
 
     }
 
-    public static class UsersViewHolder extends RecyclerView.ViewHolder{
+    public static class UsersViewHolder extends RecyclerView.ViewHolder{   //Wyswietlanie danych na liscie użytkowników
 
         View mView;
 
@@ -76,10 +80,18 @@ public class UsersActivity extends AppCompatActivity {
 
         public void setName(String name){
 
-            TextView mUserNameView = (TextView) mView.findViewById(R.id.user_single_name);
+            TextView mUserNameView = (TextView) mView.findViewById(R.id.user_single_name);  //Nazwa użytkownika
             mUserNameView.setText(name);
 
         }
+
+        public void setUserEmail (String email){
+
+            TextView userEmaiView = (TextView) mView.findViewById(R.id.user_single_email);  //Hasło
+            userEmaiView.setText(email);
+
+        }
+
     }
 
 
