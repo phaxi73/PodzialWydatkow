@@ -62,8 +62,8 @@ public class UsersActivity extends AppCompatActivity {
             @Override
             protected void populateViewHolder(UsersViewHolder usersViewHolder, Users users, int position) {      //ViewHolder- Dane do wyświetlania na liście
 
-                usersViewHolder.setName(users.getName());               //Pobiera name z Users.java
-                usersViewHolder.setUserEmail(users.getEmail());         //Pobiera email
+                usersViewHolder.setName(users.getName());                                                 //Pobiera name z Users.java
+                usersViewHolder.setUserEmail(users.getEmail());                                           //Pobiera email
                 usersViewHolder.setUserImage(users.getThumb_image(), getApplicationContext());            //Pobiera thumb_image, context dla UserViewHolder (wyswietlanie na liście)
 
                 final String user_id = getRef(position).getKey();                                               //Pozycja (gdzie user tapuje, tutaj- na layout pojedynczego usera)

@@ -44,7 +44,7 @@ public class Users {
         return email;
     }
 
-    public void setEmail(String thumb_image) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
