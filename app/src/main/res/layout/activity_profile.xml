@@ -30,11 +30,11 @@
 
     <Button
         android:id="@+id/profile_invite_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="188dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="76dp"
         android:backgroundTint="@color/colorAccent"
-        android:text="@string/dodaj_do_znajomych"
+        android:text="@string/zapro_do_znajomych"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_display_name" />
@@ -50,5 +50,16 @@
         app:srcCompat="@drawable/account_icon_orange_wide"
         android:scaleType="centerCrop"
         android:foregroundGravity="center"/>
+
+    <Button
+        android:id="@+id/profile_cancel_btn"
+        android:layout_width="188dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/odrzu_zaproszenie"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_invite_btn" />
 
 </android.support.constraint.ConstraintLayout>

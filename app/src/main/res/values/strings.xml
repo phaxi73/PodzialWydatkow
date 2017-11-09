@@ -20,6 +20,8 @@
     <string name="u_ytkownicy">Użytkownicy</string>
     <string name="nazwa_u_ytkownika">Nazwa użytkownika</string>
     <string name="dodaj_do_znajomych">DODAJ DO ZNAJOMYCH</string>
+    <string name="odrzu_zaproszenie">odrzuć zaproszenie</string>
+    <string name="zapro_do_znajomych">zaproś do znajomych</string>
 
 
 </resources>
