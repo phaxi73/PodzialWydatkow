@@ -7,43 +7,48 @@
     tools:context="com.example.bartek.podzialwydatkow.ProfileActivity"
     android:background="@color/colorPrimary">
 
+    <include
+        android:id="@+id/profile_toolbar"
+        layout="@layout/app_bar_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/profile_display_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Display Name"
+        android:layout_marginTop="20dp"
+        android:text="@string/nazwa_u_ytkownika"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="28sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
-    <TextView
-        android:id="@+id/textView3"
+    <Button
+        android:id="@+id/profile_invite_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:gravity="center"
-        android:text="Tu kiedyś będzie profil użytkownika \ni opcja zapraszania"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintHorizontal_bias="0.508"
+        android:layout_marginTop="96dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/dodaj_do_znajomych"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_display_name" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:text="User ID:"
-        android:textColor="@color/white"
-        android:textSize="20sp"
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="match_parent"
+        android:layout_height="188dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_toolbar"
+        app:srcCompat="@drawable/account_icon_orange_wide"
+        android:scaleType="centerCrop"
+        android:foregroundGravity="center"/>
 
 </android.support.constraint.ConstraintLayout>

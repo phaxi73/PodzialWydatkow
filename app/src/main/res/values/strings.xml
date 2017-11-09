@@ -18,6 +18,8 @@
     <string name="display_name">Display Name</string>
     <string name="nazwa_u_ytkownika_3_24_znaki">Nazwa użytkownika (3\-24 znaki)</string>
     <string name="u_ytkownicy">Użytkownicy</string>
+    <string name="nazwa_u_ytkownika">Nazwa użytkownika</string>
+    <string name="dodaj_do_znajomych">DODAJ DO ZNAJOMYCH</string>
 
 
 </resources>

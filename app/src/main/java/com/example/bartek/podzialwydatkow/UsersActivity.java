@@ -67,6 +67,7 @@ public class UsersActivity extends AppCompatActivity {
                 usersViewHolder.setUserImage(users.getThumb_image(), getApplicationContext());            //Pobiera thumb_image, context dla UserViewHolder (wyswietlanie na liście)
 
                 final String user_id = getRef(position).getKey();                                               //Pozycja (gdzie user tapuje, tutaj- na layout pojedynczego usera)
+                final String name = getRef(position).getKey();
 
                 usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {                     //mView definiuje cały users_single_layout
                     @Override
@@ -74,6 +75,7 @@ public class UsersActivity extends AppCompatActivity {
 
                         Intent profile_intent = new Intent(UsersActivity.this, ProfileActivity.class);
                         profile_intent.putExtra("user_id", user_id);                               //Wysyłam user_id do innej strony (ProfileActivity.class)
+                        profile_intent.putExtra("name", name);
                         startActivity(profile_intent);
                     }
                 });

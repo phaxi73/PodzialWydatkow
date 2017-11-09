@@ -56,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/display_name"
+        android:text="@string/nazwa_u_ytkownika"
         android:textColor="@color/white"
         android:textSize="28sp"
         app:layout_constraintLeft_toLeftOf="parent"

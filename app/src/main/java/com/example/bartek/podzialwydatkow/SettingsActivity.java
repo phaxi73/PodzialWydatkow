@@ -131,7 +131,6 @@ public class SettingsActivity extends AppCompatActivity {
             Uri imageUri = data.getData();
 
             CropImage.activity(imageUri)
-                    .setFixAspectRatio(true)
                     .setAspectRatio(1,1)
                     .setMinCropWindowSize(500,500)
                     .start(this );
