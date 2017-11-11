@@ -84,8 +84,17 @@ public class MainActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.main_logout_btn){      //Should've used switch here xD
 
-            FirebaseAuth.getInstance().signOut();
-            sendToStart();
+                new AlertDialog.Builder(this).setTitle("Wylogowywanie")
+                        .setIcon(R.drawable.ic_warning_purple_48dp)
+                        .setMessage("Czy na pewno chcesz się wylogować?")
+                        .setNegativeButton("Tak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                FirebaseAuth.getInstance().signOut();
+                                sendToStart();
+                            }
+                        }).setPositiveButton("Nie", null).show();
+
         }
 
         if(item.getItemId() == R.id.main_setting_btn){
