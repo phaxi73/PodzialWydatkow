@@ -73,18 +73,51 @@ public class ProfileActivity extends AppCompatActivity {
         mCurrent_state = "not_friends";
 
 
-        mUsersDatabase.addValueEventListener(new ValueEventListener() {         //Odbieram dane przy użyciu data snapshot
+        mUsersDatabase.addValueEventListener(new ValueEventListener() {                                    //Odbieram dane przy użyciu data snapshot
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 String display_name = dataSnapshot.child("name").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
 
-                mDisplayName.setText(display_name);                                                        //Wyswietlanie nazwy użytkownika
+                mDisplayName.setText(display_name);                                                        //Wyswietlanie odebranej nazwy użytkownika
 
                 Picasso.with(ProfileActivity.this).load(image).placeholder(R.drawable.account_icon_orange_wide).into(mProfileImage);   //Wyswietlanie obrazu- Placeholder, żeby wyswietlalo najpierw domyslny obraz,
 
-                mProgressDialog.dismiss();
+                //---------------------- ZNAJOMI / ODBIERANIE ZAPROSZENIA ---------------------------------------------------------------------------
+                //Wykrywa, czy zalogowany użytkownik jest zaproszony przez danego innego i zmienia odpowiednio przycisk
+                mFriendReqDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {              //SingleValueEvent działa tylko raz i dla jednej wartości
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if(dataSnapshot.hasChild(user_id)){
+
+                            String req_type = dataSnapshot.child(user_id).child("request_type").getValue().toString();
+
+                            if(req_type.equals("received")){
+
+                                mCurrent_state = "req_received";                                      //Zmiana statusu z powrotem na "not_friends", z "req_sent"
+                                mProfileInviteBtn.setText("Zaakceptuj zaproszenie");                  //Zmiana tekstu na przycisku, po anulowaniu wysłania zaproszenia
+
+                            } else if(req_type.equals("sent")){
+
+                                mCurrent_state = "req_sent";
+                                mProfileInviteBtn.setText("Odrzuć zaprosznie");
+
+                            }
+
+                        }
+
+                        mProgressDialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
 
