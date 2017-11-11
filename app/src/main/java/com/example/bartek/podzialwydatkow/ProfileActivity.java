@@ -99,6 +99,10 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                mProfileInviteBtn.setEnabled(false);                                                        //Po tapnięciu na przycisk, wyłącza się on
+
+                // ------------------ WYSYŁANIE ZAPROSZENIA - "not_friends" ---------------------------------------------------------------------------------------------------
+
                 if(mCurrent_state.equals("not_friends")){
 
                     mFriendReqDatabase.child(mCurrentUser.getUid()).child(user_id).child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -112,6 +116,10 @@ public class ProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
+                                        mProfileInviteBtn.setEnabled(true);                                  //Po wysłaniu zaproszenia, znowu włączam przycisk
+                                        mCurrent_state = "req_sent";                                         //Zmiana statusu na "req_sent", z "not_friends", a cała cały if działa tylko dla "not_friends"
+                                        mProfileInviteBtn.setText("Anuluj zaproszenie");                     //Zmiana tekstu na przycisku, po wysłaniu zaproszenia
+
                                         Toast.makeText(ProfileActivity.this, "Wysłano zaproszenie do znajomych", Toast.LENGTH_SHORT).show();
 
                                     }
@@ -122,6 +130,32 @@ public class ProfileActivity extends AppCompatActivity {
                                 Toast.makeText(ProfileActivity.this, "Wysyłanie zaproszenia nie powiodło się", Toast.LENGTH_SHORT).show();
 
                             }
+
+                        }
+                    });
+
+                }
+
+                // ------------------ ANULOWANIE WYSŁANEGO ZAPROSZENIA - "req_sent" ----------------------------------------------------------------------------------------
+
+                if(mCurrent_state.equals("req_sent")){
+
+                    //Usuwam zaproszenie z current user (remove value usuwa wartość z klucza, a pusty klucz znika
+                    mFriendReqDatabase.child(mCurrentUser.getUid()).child(user_id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+
+                                mFriendReqDatabase.child(user_id).child(mCurrentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        mProfileInviteBtn.setEnabled(true);                                  //Po anulowaniu wysłania zaproszenia, znowu włączam przycisk
+                                        mCurrent_state = "not_friends";                                      //Zmiana statusu z powrotem na "not_friends", z "req_sent"
+                                        mProfileInviteBtn.setText("Zaproś do znajomych");                    //Zmiana tekstu na przycisku, po anulowaniu wysłania zaproszenia
+
+                                    }
+                                });
 
                         }
                     });
