@@ -1,13 +1,21 @@
 package com.example.bartek.podzialwydatkow;
 
 import android.app.ProgressDialog;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.TextureView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,8 +34,14 @@ public class ProfileActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar mToolbar;
 
     private DatabaseReference mUsersDatabase;                   //Mam user_id, więc potrzebuje referencji do bazy danych, żeby móc uzyskać resztę danych
+                                                                        //Uzyć obu referencji w onCreate(Bundle savedInstanceState)
+    private DatabaseReference mFriendReqDatabase;               //Referencja do zrobienia zapraszania do znajomych
+
+    private FirebaseUser mCurrentUser;                          //Żeby móc wyciągać user id z autha, użuć FirebaseAuth w onCreate (Bundle savedInstanceState)
 
     private ProgressDialog mProgressDialog;
+
+    private String mCurrent_state;                               //Status znajomosci
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +53,11 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Profil użytkownika");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String user_id = getIntent().getStringExtra("user_id");         //Pobiera user_id z UsersActivity (z populatViewHolder)
+        final String user_id = getIntent().getStringExtra("user_id");         //Pobiera user_id z UsersActivity (z populatViewHolder)
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+        mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         mProfileImage = (ImageView) findViewById(R.id.profile_image);
         mDisplayName = (TextView) findViewById(R.id.profile_display_name);
@@ -52,6 +68,9 @@ public class ProfileActivity extends AppCompatActivity {
         mProgressDialog.setMessage("Proszę czekać...");
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
+
+
+        mCurrent_state = "not_friends";
 
 
         mUsersDatabase.addValueEventListener(new ValueEventListener() {         //Odbieram dane przy użyciu data snapshot
@@ -72,10 +91,45 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-
+                //Co w przypadku errora
             }
         });
 
+        mProfileInviteBtn.setOnClickListener(new View.OnClickListener() {                                   //Przycisk do zapraszania
+            @Override
+            public void onClick(View view) {
+
+                if(mCurrent_state.equals("not_friends")){
+
+                    mFriendReqDatabase.child(mCurrentUser.getUid()).child(user_id).child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if(task.isSuccessful()){
+
+                                mFriendReqDatabase.child(user_id).child(mCurrentUser.getUid()).child("request_type")
+                                    .setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                        Toast.makeText(ProfileActivity.this, "Wysłano zaproszenie do znajomych", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+
+                            } else {
+
+                                Toast.makeText(ProfileActivity.this, "Wysyłanie zaproszenia nie powiodło się", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                        }
+                    });
+
+                }
+
+            }
+        });
 
     }
 }
