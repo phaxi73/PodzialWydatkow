@@ -55,8 +55,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         final String user_id = getIntent().getStringExtra("user_id");         //Pobiera user_id z UsersActivity (z populatViewHolder)
 
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
-        mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);               //definiowanie obiektów- "Users" i "Friend_req"
+        mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");                     //To nazwy węzłów w bazie danych
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         mProfileImage = (ImageView) findViewById(R.id.profile_image);
@@ -85,16 +85,18 @@ public class ProfileActivity extends AppCompatActivity {
                 Picasso.with(ProfileActivity.this).load(image).placeholder(R.drawable.account_icon_orange_wide).into(mProfileImage);   //Wyswietlanie obrazu- Placeholder, żeby wyswietlalo najpierw domyslny obraz,
 
                 //---------------------- ZNAJOMI / ODBIERANIE ZAPROSZENIA ---------------------------------------------------------------------------
-                //Wykrywa, czy zalogowany użytkownik jest zaproszony przez danego innego i zmienia odpowiednio przycisk
+                //----Wykrywa, czy zalogowany użytkownik jest zaproszony przez danego innego i zmienia odpowiednio przycisk----
+                //mFriendReqDatabase- w tym obiekcie (zdefiniowany na górze (=Friend_req, to jest nazwa węzła w bazie danych)),
+                //child(mCurrentUser.getUid)- pobieram swoje id (aktualnie zalogowany użytkownik)
                 mFriendReqDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {              //SingleValueEvent działa tylko raz i dla jednej wartości
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if(dataSnapshot.hasChild(user_id)){
+                        if(dataSnapshot.hasChild(user_id)){                                           //Jeżeli aktualny obiekt () ma ID osoby, na której profilu jestem, to:
 
-                            String req_type = dataSnapshot.child(user_id).child("request_type").getValue().toString();
+                            String req_type = dataSnapshot.child(user_id).child("request_type").getValue().toString();     //Wchodzę do childa użytkownika, który wysłał zaproszenie, uzyskuje jego wartosć (typ requesta)
 
-                            if(req_type.equals("received")){
+                            if(req_type.equals("received")){                                                               //Uzyskaną wartość wykorzystuje tutaj i w "else if"
 
                                 mCurrent_state = "req_received";                                      //Zmiana statusu z powrotem na "not_friends", z "req_sent"
                                 mProfileInviteBtn.setText("Zaakceptuj zaproszenie");                  //Zmiana tekstu na przycisku, po anulowaniu wysłania zaproszenia
