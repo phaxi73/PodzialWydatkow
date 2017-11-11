@@ -25,6 +25,9 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView mProfileImage;
@@ -36,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     private DatabaseReference mUsersDatabase;                   //Mam user_id, więc potrzebuje referencji do bazy danych, żeby móc uzyskać resztę danych
                                                                         //Uzyć obu referencji w onCreate(Bundle savedInstanceState)
     private DatabaseReference mFriendReqDatabase;               //Referencja do zrobienia zapraszania do znajomych
+    private DatabaseReference mFriendDatabase;                  //Referencja do zrobienia znajomych
 
     private FirebaseUser mCurrentUser;                          //Żeby móc wyciągać user id z autha, użuć FirebaseAuth w onCreate (Bundle savedInstanceState)
 
@@ -55,8 +59,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         final String user_id = getIntent().getStringExtra("user_id");         //Pobiera user_id z UsersActivity (z populatViewHolder)
 
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);               //definiowanie obiektów- "Users" i "Friend_req"
-        mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");                     //To nazwy węzłów w bazie danych
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);               //Definiowanie obiektów
+        mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");                     //"Users", "Friend_req", "Friends"
+        mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");                           //To nazwy węzłów (kluczy) w bazie danych
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         mProfileImage = (ImageView) findViewById(R.id.profile_image);
@@ -136,7 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 mProfileInviteBtn.setEnabled(false);                                                        //Po tapnięciu na przycisk, wyłącza się on
 
-                // ------------------ WYSYŁANIE ZAPROSZENIA - "not_friends" ---------------------------------------------------------------------------------------------------
+                // ------------------ WYSYŁANIE ZAPROSZENIA - aktualny stan: "not_friends" -----------------------------------------------------------------------------------
 
                 if(mCurrent_state.equals("not_friends")){
 
@@ -151,7 +156,6 @@ public class ProfileActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Void aVoid) {
 
-                                        mProfileInviteBtn.setEnabled(true);                                  //Po wysłaniu zaproszenia, znowu włączam przycisk
                                         mCurrent_state = "req_sent";                                         //Zmiana statusu na "req_sent", z "not_friends", a cała cały if działa tylko dla "not_friends"
                                         mProfileInviteBtn.setText("Anuluj zaproszenie");                     //Zmiana tekstu na przycisku, po wysłaniu zaproszenia
 
@@ -166,12 +170,14 @@ public class ProfileActivity extends AppCompatActivity {
 
                             }
 
+                            mProfileInviteBtn.setEnabled(true);                                  //Po wysłaniu zaproszenia, znowu włączam przycisk, nawet przy nieudanej próbie
+
                         }
                     });
 
                 }
 
-                // ------------------ ANULOWANIE WYSŁANEGO ZAPROSZENIA - "req_sent" ----------------------------------------------------------------------------------------
+                // ------------------ ANULOWANIE WYSŁANEGO ZAPROSZENIA - aktualny stan: "req_sent" ----------------------------------------------------------------------------
 
                 if(mCurrent_state.equals("req_sent")){
 
@@ -194,6 +200,50 @@ public class ProfileActivity extends AppCompatActivity {
 
                         }
                     });
+
+                }
+
+
+                // ----------------- OTRZYMANIE ZAPROSZENIE - aktualny stan: "req_received" -------------------------------------------------------------------------------------
+
+                if(mCurrent_state.equals("req_received")){
+
+                    final String currentDate = DateFormat.getDateInstance().format(new Date());
+
+                    //              ID (atualny użytkownik)     ID (inny użytkownik)
+                   mFriendDatabase.child(mCurrentUser.getUid()).child(user_id).setValue(currentDate)
+                           .addOnSuccessListener(new OnSuccessListener<Void>() {
+                               @Override
+                               public void onSuccess(Void aVoid) {
+
+                                   mFriendDatabase.child(user_id).child(mCurrentUser.getUid()).setValue(currentDate)
+                                           .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                               @Override
+                                               public void onSuccess(Void aVoid) {
+
+                                                   mFriendReqDatabase.child(mCurrentUser.getUid()).child(user_id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                       @Override
+                                                       public void onSuccess(Void aVoid) {
+
+                                                           mFriendReqDatabase.child(user_id).child(mCurrentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                               @Override
+                                                               public void onSuccess(Void aVoid) {
+
+                                                                   mProfileInviteBtn.setEnabled(true);                                  //Po anulowaniu wysłania zaproszenia, znowu włączam przycisk
+                                                                   mCurrent_state = "friends";                                          //Zmiana statusu z powrotem na "friends", z "req_received"
+                                                                   mProfileInviteBtn.setText("Usuń ze znajomych");                      //Zmiana tekstu na przycisku, po przyjęciu zaproszenia
+
+                                                               }
+                                                           });
+
+                                                       }
+                                                   });
+
+                                               }
+                                           });
+
+                               }
+                           });
 
                 }
 
