@@ -26,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -82,21 +84,39 @@ public class SettingsActivity extends AppCompatActivity {
         String current_uid = mCurrentUser.getUid();
 
         mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+        mUserDatabase.keepSynced(true);
 
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {  //Dodawanie lub otrzymywanie danych
 
                 String name= dataSnapshot.child("name").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                final String image = dataSnapshot.child("image").getValue().toString();
                 String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
 
                 mName.setText(name);
 
                 if(!image.equals("default")){ //Ladowanie obrazue (żeli użytkownik nie dodał swojego obrazu, wyświetl obraz domyślny)
 
-                    Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.account_icon_orange).into(mDisplayImage);
+                    //Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.account_icon_orange).into(mDisplayImage);
 
+                    //Pozwala na ładowanie obrazów offline
+                    Picasso.with(SettingsActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.account_icon_orange).into(mDisplayImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                            //Nie musi tu nic być
+
+                        }
+
+                        @Override
+                        public void onError() {
+
+                            //Jeżeli obraz nie może być załadowany offline, ładuje go normalnie
+                            Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.account_icon_orange).into(mDisplayImage);
+
+                        }
+                    });
                 }
             }
 

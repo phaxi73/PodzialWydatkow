@@ -61,6 +61,8 @@
         android:text="@string/odrzu_zaproszenie"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_invite_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_invite_btn"
+        android:visibility="invisible"
+        android:enabled="false"/>
 
 </android.support.constraint.ConstraintLayout>

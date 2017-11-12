@@ -33,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView mProfileImage;
     private TextView mDisplayName;
     private Button mProfileInviteBtn;
+    private Button mCancelBtn;                                  //Przycisk do odrzucania zaproszenia
 
     private android.support.v7.widget.Toolbar mToolbar;
 
@@ -63,10 +64,14 @@ public class ProfileActivity extends AppCompatActivity {
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");                     //"Users", "Friend_req", "Friends"
         mFriendDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");                           //To nazwy węzłów (kluczy) w bazie danych
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUsersDatabase.keepSynced(true);                                                                        //Umożliwia
+        mFriendReqDatabase.keepSynced(true);                                                                    //Odczyt
+        mFriendDatabase.keepSynced(true);                                                                       //Offline
 
-        mProfileImage = (ImageView) findViewById(R.id.profile_image);
-        mDisplayName = (TextView) findViewById(R.id.profile_display_name);
-        mProfileInviteBtn = (Button) findViewById(R.id.profile_invite_btn);
+        mProfileImage = (ImageView) findViewById(R.id.profile_image);                                              //ImageView do wyświetlania obrazu profilowego
+        mDisplayName = (TextView) findViewById(R.id.profile_display_name);                                         //TextView do wyświetlania nazwy użytkownika
+        mProfileInviteBtn = (Button) findViewById(R.id.profile_invite_btn);                                        //Przycisk do zapraszania do znajomych (i inne funkcje później)
+        mCancelBtn = (Button) findViewById(R.id.profile_cancel_btn);                                               //Przycisk do odrzucania zaproszenia
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle("Wczytywanie profilu");
@@ -106,10 +111,17 @@ public class ProfileActivity extends AppCompatActivity {
                                 mCurrent_state = "req_received";                                      //Zmiana statusu z powrotem na "not_friends", z "req_sent"
                                 mProfileInviteBtn.setText("Zaakceptuj zaproszenie");                  //Zmiana tekstu na przycisku, po anulowaniu wysłania zaproszenia
 
+                                //TYLKO TUTAJ POWINNO SIĘ DAĆ ODRZUCIĆ ZAPROSZENIE (GDY UŻYTKOWNIK JE JUŻ DOSTANIE)
+                                mCancelBtn.setVisibility(View.VISIBLE);                              //Przycisk jest widzialny
+                                mCancelBtn.setEnabled(true);                                         //Przycisk jest włączony
+
                             } else if(req_type.equals("sent")){
 
                                 mCurrent_state = "req_sent";
                                 mProfileInviteBtn.setText("Anuluj zaproszenie");
+
+                                mCancelBtn.setVisibility(View.INVISIBLE);                             //Przycisk staje się niewidzialny
+                                mCancelBtn.setEnabled(false);                                         //Przycisk jest wyłączony
 
                             }
 
@@ -117,14 +129,19 @@ public class ProfileActivity extends AppCompatActivity {
 
                         } else {
 
-                            mFriendDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            //Jak zaakceptuje zaproszenie to:
+                            mFriendDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {    //Wchodzę do child, który zawiera ID aktualnego użytkownika
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                    if(dataSnapshot.hasChild(user_id)){
+                                    if(dataSnapshot.hasChild(user_id)){                                      //Sprawdzam, czy profil użytkownika, na którym aktualnie jestem istnieje,
+                                                                                                             //Jeżeli istnieje, to znaczy, że ten użytkownik jest już znajomym
 
-                                        mCurrent_state = "friends";                                          //Zmiana statusu z powrotem na "friends", z "req_received"
-                                        mProfileInviteBtn.setText("Usuń ze znajomych");                      //Zmiana tekstu na przycisku, po przyjęciu zaproszenia
+                                        mCurrent_state = "friends";                                          //Zmiana statusu z na "friends"
+                                        mProfileInviteBtn.setText("Usuń ze znajomych");                      //Zmiana tekstu na przycisku
+
+                                        mCancelBtn.setVisibility(View.INVISIBLE);                             //Przycisk staje się niewidzialny
+                                        mCancelBtn.setEnabled(false);                                         //Przycisk jest wyłączony
 
                                     }
 
@@ -185,6 +202,9 @@ public class ProfileActivity extends AppCompatActivity {
                                         mCurrent_state = "req_sent";                                         //Zmiana statusu na "req_sent", z "not_friends", a cała cały if działa tylko dla "not_friends"
                                         mProfileInviteBtn.setText("Anuluj zaproszenie");                     //Zmiana tekstu na przycisku, po wysłaniu zaproszenia
 
+                                        mCancelBtn.setVisibility(View.INVISIBLE);                             //Przycisk staje się niewidzialny
+                                        mCancelBtn.setEnabled(false);                                         //Przycisk jest wyłączony
+
                                         Toast.makeText(ProfileActivity.this, "Wysłano zaproszenie do znajomych", Toast.LENGTH_SHORT).show();
 
                                     }
@@ -220,6 +240,9 @@ public class ProfileActivity extends AppCompatActivity {
                                         mProfileInviteBtn.setEnabled(true);                                  //Po anulowaniu wysłania zaproszenia, znowu włączam przycisk
                                         mCurrent_state = "not_friends";                                      //Zmiana statusu z powrotem na "not_friends", z "req_sent"
                                         mProfileInviteBtn.setText("Zaproś do znajomych");                    //Zmiana tekstu na przycisku, po anulowaniu wysłania zaproszenia
+
+                                        mCancelBtn.setVisibility(View.INVISIBLE);                             //Przycisk staje się niewidzialny
+                                        mCancelBtn.setEnabled(false);                                         //Przycisk jest wyłączony
 
                                     }
                                 });
@@ -258,6 +281,9 @@ public class ProfileActivity extends AppCompatActivity {
                                                                    mProfileInviteBtn.setEnabled(true);                                  //Po anulowaniu wysłania zaproszenia, znowu włączam przycisk
                                                                    mCurrent_state = "friends";                                          //Zmiana statusu z powrotem na "friends", z "req_received"
                                                                    mProfileInviteBtn.setText("Usuń ze znajomych");                      //Zmiana tekstu na przycisku, po przyjęciu zaproszenia
+
+                                                                   mCancelBtn.setVisibility(View.INVISIBLE);                             //Przycisk staje się niewidzialny
+                                                                   mCancelBtn.setEnabled(false);                                         //Przycisk jest wyłączony
 
                                                                }
                                                            });
