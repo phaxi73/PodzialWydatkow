@@ -90,7 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Picasso.with(ProfileActivity.this).load(image).placeholder(R.drawable.account_icon_orange_wide).into(mProfileImage);   //Wyswietlanie obrazu- Placeholder, żeby wyswietlalo najpierw domyslny obraz,
 
                 //---------------------- ZNAJOMI / ODBIERANIE ZAPROSZENIA ---------------------------------------------------------------------------
-                //----Wykrywa, czy zalogowany użytkownik jest zaproszony przez danego innego i zmienia odpowiednio przycisk----
+                //----Wykrywa, czy zalogowany użytkownik jest zaproszony przez danego innego użytkownika i zmienia odpowiednio przycisk----
                 //mFriendReqDatabase- w tym obiekcie (zdefiniowany na górze (=Friend_req, to jest nazwa węzła w bazie danych)),
                 //child(mCurrentUser.getUid)- pobieram swoje id (aktualnie zalogowany użytkownik)
                 mFriendReqDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {              //SingleValueEvent działa tylko raz i dla jednej wartości
@@ -109,13 +109,39 @@ public class ProfileActivity extends AppCompatActivity {
                             } else if(req_type.equals("sent")){
 
                                 mCurrent_state = "req_sent";
-                                mProfileInviteBtn.setText("Odrzuć zaprosznie");
+                                mProfileInviteBtn.setText("Anuluj zaproszenie");
 
                             }
 
+                            mProgressDialog.dismiss();
+
+                        } else {
+
+                            mFriendDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    if(dataSnapshot.hasChild(user_id)){
+
+                                        mCurrent_state = "friends";                                          //Zmiana statusu z powrotem na "friends", z "req_received"
+                                        mProfileInviteBtn.setText("Usuń ze znajomych");                      //Zmiana tekstu na przycisku, po przyjęciu zaproszenia
+
+                                    }
+
+                                    mProgressDialog.dismiss();
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                    mProgressDialog.dismiss();
+
+                                }
+                            });
+
                         }
 
-                        mProgressDialog.dismiss();
 
                     }
 
