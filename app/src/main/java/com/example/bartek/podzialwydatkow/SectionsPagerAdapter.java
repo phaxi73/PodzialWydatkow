@@ -38,7 +38,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter{
     @Override
     public int getCount() {       //liczba zakładek
         return 3;
-    }
+    }       //Ilość zakładek
 
     public CharSequence getPageTitle(int position){
 

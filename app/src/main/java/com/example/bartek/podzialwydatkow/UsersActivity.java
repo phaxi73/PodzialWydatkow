@@ -35,6 +35,7 @@ public class UsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
+        //Toolbar
         mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.users_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Użytkownicy");
@@ -53,11 +54,13 @@ public class UsersActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>(
-                Users.class,
-                R.layout.users_single_layout,
-                UsersViewHolder.class,
-                mUsersDatabase) {
+        FirebaseRecyclerAdapter<Users, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, UsersViewHolder>
+                (Users.class,
+                 R.layout.users_single_layout,
+                 UsersViewHolder.class,
+                 mUsersDatabase
+                )
+        {
 
             @Override
             protected void populateViewHolder(UsersViewHolder usersViewHolder, Users users, int position) {      //ViewHolder- Dane do wyświetlania na liście
