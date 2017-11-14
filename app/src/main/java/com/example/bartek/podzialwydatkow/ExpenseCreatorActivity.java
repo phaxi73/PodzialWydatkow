@@ -32,18 +32,44 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
+
         mCreatorExpenseName = (TextView) findViewById(R.id.creator_expense_name);
         final String expensekey = getIntent().getStringExtra("expense");
+        final String user_id = getIntent().getStringExtra("user_id");
 
-
-
-
+        /*
         mExpensesDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 String expensename = dataSnapshot.child("Expenses").child(mCurrent_user_id).child("expense").child(expensekey).child("expensename").toString();
                 mCreatorExpenseName.setText(expensename);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        */
+
+        mExpensesDatabase.child(mCurrent_user_id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.hasChild(user_id)){
+
+                    String expensename = dataSnapshot.child("Expenses")
+                            .child(mCurrent_user_id)
+                            .child("expense")
+                            .child(expensekey)
+                            .child("expensename").getValue().toString();
+
+
+                    mCreatorExpenseName.setText(expensename);
+
+                }
+
             }
 
             @Override

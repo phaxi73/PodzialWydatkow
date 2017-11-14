@@ -85,9 +85,12 @@ public class ExpensesFragment extends Fragment {
 
 
                 expensesViewHolder.setExpenseName(expenses.getExpensename());           //Bierze Expensename z klasy Expenses.java
+                expensesViewHolder.setExpenseKey(expenses.getExpensekey());
+                expensesViewHolder.setUser_id(expenses.getUser_id());
 
                 final String expensename = getRef(position).getKey();
-                final String expensekey =getRef(position).getKey();
+                final String expensekey = getRef(position).getKey();
+                final String user_id = getRef(position).getKey();
 
                 expensesViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -96,6 +99,7 @@ public class ExpensesFragment extends Fragment {
                         Intent expensecreator_intent = new Intent(getActivity(), ExpenseCreatorActivity.class);
                         expensecreator_intent.putExtra("expensemame", expensename);
                         expensecreator_intent.putExtra("expense", expensekey);
+                        expensecreator_intent.putExtra("user_id", user_id);
                         startActivity(expensecreator_intent);
 
                     }
@@ -112,6 +116,8 @@ public class ExpensesFragment extends Fragment {
     public static class ExpensesViewHolder extends RecyclerView.ViewHolder{   //Wyswietlanie danych na liscie expenses
 
         View mView;                                                           //mView definiuje cały expenses_single_layout
+        private String user_id;
+        private String expenseKey;
 
         public ExpensesViewHolder(View itemView) {
             super(itemView);
@@ -127,7 +133,13 @@ public class ExpensesFragment extends Fragment {
 
         }
 
+        public void setUser_id(String user_id) {
+            this.user_id = user_id;
+        }
 
+        public void setExpenseKey(String expenseKey) {
+            this.expenseKey = expenseKey;
+        }
     }
 
 

@@ -106,7 +106,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                         if(dataSnapshot.hasChild(user_id)){                                           //Jeżeli aktualny obiekt () ma ID osoby, na której profilu jestem, to:
 
-                            String req_type = dataSnapshot.child(user_id).child("request_type").getValue().toString();     //Wchodzę do childa użytkownika, który wysłał zaproszenie, uzyskuje jego wartosć (typ requesta)
+                            String req_type = dataSnapshot.child(user_id)                             //Wchodzę do childa użytkownika, który wysłał zaproszenie, uzyskuje jego wartosć (typ requesta)
+                                    .child("request_type").getValue().toString();
 
                             if(req_type.equals("received")){                                                               //Uzyskaną wartość wykorzystuje tutaj i w "else if"
 
