@@ -60,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Profil użytkownika");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final String user_id = getIntent().getStringExtra("user_id");         //Pobiera user_id z UsersActivity (z populatViewHolder)
+        final String user_id = getIntent().getStringExtra("user_id");         //Pobiera user_id z UsersActivity (z populateViewHolder)
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);               //Definiowanie obiektów
         mFriendReqDatabase = FirebaseDatabase.getInstance().getReference().child("Friend_req");                     //"Users", "Friend_req", "Friends"

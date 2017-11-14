@@ -22,6 +22,8 @@
     <string name="dodaj_do_znajomych">DODAJ DO ZNAJOMYCH</string>
     <string name="odrzu_zaproszenie">odrzuć zaproszenie</string>
     <string name="zapro_do_znajomych">zaproś do znajomych</string>
+    <string name="wydatek">Wydatek</string>
+    <string name="dodaj_wydatek">DODAJ WYDATEK</string>
 
 
 </resources>

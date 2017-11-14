@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -31,8 +32,7 @@ public class ExpensesFragment extends Fragment {
 
     private View mMainView;
 
-
-
+    private Button mExpensesAdderBtn;
 
     public ExpensesFragment() {  // Required empty public constructor
     }
@@ -43,22 +43,34 @@ public class ExpensesFragment extends Fragment {
 
         mMainView = inflater.inflate(R.layout.fragment_expenses, container, false);
 
+        mExpensesAdderBtn = (Button) mMainView.findViewById(R.id.expenses_new_expense);
+
         mExpensesList = (RecyclerView) mMainView.findViewById(R.id.expenses_list);
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
-        mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses");
+        mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses").child(mCurrent_user_id).child("expense");
 
         mExpensesList.setHasFixedSize(true);
         mExpensesList.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        mExpensesAdderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent adderintent = new Intent(getActivity(), ExpenseAdderActivity.class);
+                startActivity(adderintent);
+
+            }
+        });
 
         return mMainView; //Inflate the layout for this fragment
     }
 
     public void onStart(){
         super.onStart();
+
 
         FirebaseRecyclerAdapter<Expenses, ExpensesViewHolder> expensesRecyclerViewAdapter = new FirebaseRecyclerAdapter<Expenses, ExpensesViewHolder>
                 (Expenses.class,
@@ -75,6 +87,7 @@ public class ExpensesFragment extends Fragment {
                 expensesViewHolder.setExpenseName(expenses.getExpensename());           //Bierze Expensename z klasy Expenses.java
 
                 final String expensename = getRef(position).getKey();
+                final String expensekey =getRef(position).getKey();
 
                 expensesViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -82,6 +95,7 @@ public class ExpensesFragment extends Fragment {
 
                         Intent expensecreator_intent = new Intent(getActivity(), ExpenseCreatorActivity.class);
                         expensecreator_intent.putExtra("expensemame", expensename);
+                        expensecreator_intent.putExtra("expense", expensekey);
                         startActivity(expensecreator_intent);
 
                     }
@@ -115,5 +129,9 @@ public class ExpensesFragment extends Fragment {
 
 
     }
+
+
+
+
 
 }
