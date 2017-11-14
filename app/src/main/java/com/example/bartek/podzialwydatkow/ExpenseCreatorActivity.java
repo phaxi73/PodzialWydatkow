@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -13,6 +14,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ExpenseCreatorActivity extends AppCompatActivity {
+
+    private android.support.v7.widget.Toolbar mToolbar;
 
     private TextView mCreatorExpenseName;
 
@@ -27,6 +30,11 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_creator);
 
+        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.expensecreator_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Edytuj Wydatek");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses");
 
         mAuth = FirebaseAuth.getInstance();
@@ -34,37 +42,20 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
 
 
         mCreatorExpenseName = (TextView) findViewById(R.id.creator_expense_name);
-        final String expensekey = getIntent().getStringExtra("expense");
+        final String expensekey = getIntent().getStringExtra("expensekey");
         final String user_id = getIntent().getStringExtra("user_id");
 
-        /*
-        mExpensesDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                String expensename = dataSnapshot.child("Expenses").child(mCurrent_user_id).child("expense").child(expensekey).child("expensename").toString();
-                mCreatorExpenseName.setText(expensename);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        */
 
         mExpensesDatabase.child(mCurrent_user_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.hasChild(user_id)){      //USER_ID CZY mCURRENTUSERID ????
+                if(dataSnapshot.hasChild("expense")){
 
-                    String expense_name = dataSnapshot.child("Expenses")
-                            .child(user_id)             //USER_ID CZY mCURRENTUSERID ????
+                    String expense_name = dataSnapshot
                             .child("expense")
                             .child(expensekey)
                             .child("expensename").getValue().toString();
-
 
                     mCreatorExpenseName.setText(expense_name);
 
@@ -74,6 +65,8 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+                Toast.makeText(getApplicationContext(), "Wystąpił błąd", Toast.LENGTH_LONG).show();
 
             }
         });

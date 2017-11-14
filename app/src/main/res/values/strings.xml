@@ -24,6 +24,8 @@
     <string name="zapro_do_znajomych">zaproś do znajomych</string>
     <string name="wydatek">Wydatek</string>
     <string name="dodaj_wydatek">DODAJ WYDATEK</string>
+    <string name="nazwa_wydatku">Nazwa wydatku:</string>
+    <string name="nazwa">Nazwa:</string>
 
 
 </resources>

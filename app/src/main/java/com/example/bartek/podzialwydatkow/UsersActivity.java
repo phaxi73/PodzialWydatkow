@@ -84,6 +84,8 @@ public class UsersActivity extends AppCompatActivity {
                 });
 
             }
+
+
         };
 
         mUsersList.setAdapter(firebaseRecyclerAdapter);
@@ -124,6 +126,8 @@ public class UsersActivity extends AppCompatActivity {
         }
 
     }
+
+
 
 
 }

@@ -85,8 +85,8 @@ public class ExpensesFragment extends Fragment {
 
 
                 expensesViewHolder.setExpenseName(expenses.getExpensename());           //Bierze Expensename z klasy Expenses.java
-                expensesViewHolder.setExpenseKey(expenses.getExpensekey());
-                expensesViewHolder.setUser_id(expenses.getUser_id());
+                //expensesViewHolder.setExpenseKey(expenses.getExpensekey());
+                //expensesViewHolder.setUser_id(expenses.getUser_id());
 
                 final String expensename = getRef(position).getKey();
                 final String expensekey = getRef(position).getKey();
@@ -98,7 +98,7 @@ public class ExpensesFragment extends Fragment {
 
                         Intent expensecreator_intent = new Intent(getActivity(), ExpenseCreatorActivity.class);
                         expensecreator_intent.putExtra("expensemame", expensename);
-                        expensecreator_intent.putExtra("expense", expensekey);
+                        expensecreator_intent.putExtra("expensekey", expensekey);
                         expensecreator_intent.putExtra("user_id", user_id);
                         startActivity(expensecreator_intent);
 
@@ -117,12 +117,14 @@ public class ExpensesFragment extends Fragment {
 
         View mView;                                                           //mView definiuje cały expenses_single_layout
 
+
         public ExpensesViewHolder(View itemView) {
             super(itemView);
 
             mView = itemView;
 
         }
+
 
         public void setExpenseName(String expensename){
 

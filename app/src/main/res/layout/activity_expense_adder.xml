@@ -43,7 +43,8 @@
             android:layout_height="wrap_content"
             android:hint="Nazwa wydatku"
             android:textColor="@color/white"
-            android:textColorHint="@color/white" />
+            android:textColorHint="@color/white"
+            android:digits="qwertyuiopasdfghjklzxcvbnm0123456789QWERTYUIOPASDFGHJKLZXCVBNMąążłóćśźęĄŻŁÓĆŚŹĘ "/>
 
     </android.support.design.widget.TextInputLayout>
 
