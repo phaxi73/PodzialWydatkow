@@ -57,16 +57,16 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.hasChild(user_id)){
+                if(dataSnapshot.hasChild(user_id)){      //USER_ID CZY mCURRENTUSERID ????
 
-                    String expensename = dataSnapshot.child("Expenses")
-                            .child(mCurrent_user_id)
+                    String expense_name = dataSnapshot.child("Expenses")
+                            .child(user_id)             //USER_ID CZY mCURRENTUSERID ????
                             .child("expense")
                             .child(expensekey)
                             .child("expensename").getValue().toString();
 
 
-                    mCreatorExpenseName.setText(expensename);
+                    mCreatorExpenseName.setText(expense_name);
 
                 }
 

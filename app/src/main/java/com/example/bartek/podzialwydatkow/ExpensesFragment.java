@@ -116,8 +116,6 @@ public class ExpensesFragment extends Fragment {
     public static class ExpensesViewHolder extends RecyclerView.ViewHolder{   //Wyswietlanie danych na liscie expenses
 
         View mView;                                                           //mView definiuje cały expenses_single_layout
-        private String user_id;
-        private String expenseKey;
 
         public ExpensesViewHolder(View itemView) {
             super(itemView);
@@ -133,17 +131,9 @@ public class ExpensesFragment extends Fragment {
 
         }
 
-        public void setUser_id(String user_id) {
-            this.user_id = user_id;
-        }
 
-        public void setExpenseKey(String expenseKey) {
-            this.expenseKey = expenseKey;
-        }
+
     }
-
-
-
 
 
 }
