@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -33,7 +34,7 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
         mCreatorExpenseName = (TextView) findViewById(R.id.creator_expense_name);
-        final String expensekey = getIntent().getStringExtra("expense");
+        final String expensekey = getIntent().getStringExtra("expensename");
 
 
         mExpensesDatabase.addValueEventListener(new ValueEventListener() {
@@ -46,6 +47,8 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+                Toast.makeText(getApplicationContext(), "Wystąpił błąd", Toast.LENGTH_SHORT).show();
 
             }
         });
