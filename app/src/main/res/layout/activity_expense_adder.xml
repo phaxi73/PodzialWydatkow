@@ -21,18 +21,18 @@
         android:id="@+id/adder_expense_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
+        android:layout_marginBottom="188dp"
         android:backgroundTint="@color/colorAccent"
         android:text="@string/dodaj_wydatek"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adder_expense_name" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/adder_expense_name"
         android:layout_width="346dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="52dp"
         android:textColorHint="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -41,10 +41,36 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nazwa wydatku"
+            android:digits="qwertyuiopasdfghjklzxcvbnm0123456789QWERTYUIOPASDFGHJKLZXCVBNMąążłóćśźęĄŻŁÓĆŚŹĘ "
+            android:hint="@string/nazwa_wydatku"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/adder_expense_amount"
+        android:layout_width="346dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="76dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/adder_expense_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adder_expense_name"
+        app:layout_constraintVertical_bias="0.72">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ile_zap_acono_pln"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
-            android:digits="qwertyuiopasdfghjklzxcvbnm0123456789QWERTYUIOPASDFGHJKLZXCVBNMąążłóćśźęĄŻŁÓĆŚŹĘ "/>
+            android:inputType="numberDecimal"/>
+
 
     </android.support.design.widget.TextInputLayout>
 

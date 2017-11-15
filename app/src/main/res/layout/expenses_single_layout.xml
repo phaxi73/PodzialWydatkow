@@ -3,28 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="52dp"
     android:backgroundTint="@color/colorAccent"
     tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/expenses_single_expense"
-        android:layout_width="112dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="360dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="4dp"
         android:backgroundTint="@color/colorAccentLight"
         android:text="@string/wydatek"
         android:textColor="@color/white"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.923" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="320dp"
+        android:layout_height="7dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenses_single_expense"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/separating_bar" />
 
 
 </android.support.constraint.ConstraintLayout>

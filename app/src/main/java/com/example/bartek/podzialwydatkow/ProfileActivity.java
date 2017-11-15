@@ -55,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.profile_toolbar);
+        mToolbar = findViewById(R.id.profile_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Profil użytkownika");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -70,10 +70,10 @@ public class ProfileActivity extends AppCompatActivity {
         mFriendReqDatabase.keepSynced(true);                                                                    //Odczyt
         mFriendDatabase.keepSynced(true);                                                                       //Offline
 
-        mProfileImage = (ImageView) findViewById(R.id.profile_image);                                              //ImageView do wyświetlania obrazu profilowego
-        mDisplayName = (TextView) findViewById(R.id.profile_display_name);                                         //TextView do wyświetlania nazwy użytkownika
-        mProfileInviteBtn = (Button) findViewById(R.id.profile_invite_btn);                                        //Przycisk do zapraszania do znajomych (i inne funkcje później)
-        mCancelBtn = (Button) findViewById(R.id.profile_cancel_btn);                                               //Przycisk do odrzucania zaproszenia
+        mProfileImage = findViewById(R.id.profile_image);                                              //ImageView do wyświetlania obrazu profilowego
+        mDisplayName = findViewById(R.id.profile_display_name);                                         //TextView do wyświetlania nazwy użytkownika
+        mProfileInviteBtn = findViewById(R.id.profile_invite_btn);                                        //Przycisk do zapraszania do znajomych (i inne funkcje później)
+        mCancelBtn = findViewById(R.id.profile_cancel_btn);                                               //Przycisk do odrzucania zaproszenia
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle("Wczytywanie profilu");
@@ -217,7 +217,7 @@ public class ProfileActivity extends AppCompatActivity {
                                         mCancelBtn.setVisibility(View.INVISIBLE);                             //Przycisk staje się niewidzialny
                                         mCancelBtn.setEnabled(false);                                         //Przycisk jest wyłączony
 
-                                        Toast.makeText(ProfileActivity.this, "Wysłano zaproszenie do znajomych", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ProfileActivity.this, "Wysłano zaproszenie do znajomych\n", Toast.LENGTH_SHORT).show();
 
                                     }
                                 });

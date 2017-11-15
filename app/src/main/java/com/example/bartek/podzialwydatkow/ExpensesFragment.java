@@ -43,9 +43,9 @@ public class ExpensesFragment extends Fragment {
 
         mMainView = inflater.inflate(R.layout.fragment_expenses, container, false);
 
-        mExpensesAdderBtn = (Button) mMainView.findViewById(R.id.expenses_new_expense);
+        mExpensesAdderBtn = mMainView.findViewById(R.id.expenses_new_expense);
 
-        mExpensesList = (RecyclerView) mMainView.findViewById(R.id.expenses_list);
+        mExpensesList = mMainView.findViewById(R.id.expenses_list);
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
@@ -128,8 +128,8 @@ public class ExpensesFragment extends Fragment {
 
         public void setExpenseName(String expensename){
 
-            TextView mExpenseNameView = (TextView) mView.findViewById(R.id.expenses_single_expense);  //Nazwa wydatku
-            mExpenseNameView.setText(expensename);
+            TextView mExpenseNameView = mView.findViewById(R.id.expenses_single_expense);  //Nazwa wydatku
+            mExpenseNameView.setText("   •" + expensename);
 
         }
 

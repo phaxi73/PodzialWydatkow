@@ -18,6 +18,7 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar mToolbar;
 
     private TextView mCreatorExpenseName;
+    private TextView mCreatorAmount;
 
     private DatabaseReference mExpensesDatabase;
 
@@ -30,7 +31,7 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_creator);
 
-        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.expensecreator_toolbar);
+        mToolbar = findViewById(R.id.expensecreator_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Edytuj Wydatek");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -41,7 +42,9 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
 
-        mCreatorExpenseName = (TextView) findViewById(R.id.creator_expense_name);
+        mCreatorExpenseName = findViewById(R.id.creator_expense_name);
+        mCreatorAmount = findViewById(R.id.creator_expense_amount);
+
         final String expensekey = getIntent().getStringExtra("expensekey");
         final String user_id = getIntent().getStringExtra("user_id");
 
@@ -57,7 +60,14 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
                             .child(expensekey)
                             .child("expensename").getValue().toString();
 
+                    String amount = dataSnapshot
+                            .child("expense")
+                            .child(expensekey)
+                            .child("amount").getValue().toString();
+
                     mCreatorExpenseName.setText(expense_name);
+                    mCreatorAmount.setText(amount + " zł");
+
 
                 }
 
