@@ -79,15 +79,15 @@ public class FriendsFragment extends Fragment {
             @Override
             protected void populateViewHolder(final FriendsViewHolder friendsViewHolder, final Friends friends, int position) {
 
-                friendsViewHolder.setName(friends.getName());
-                friendsViewHolder.setUserImage(friends.getThumb_image(), getContext());
-                friendsViewHolder.setEmail(friends.getEmail());
+                //friendsViewHolder.setName(friends.getName());
+                //friendsViewHolder.setUserImage(friends.getThumb_image(), getContext());
+                //friendsViewHolder.setEmail(friends.getEmail());
 
 
-                final String list_user_id= getRef(position).getKey();       //Do przekazania do dalszej klasy w razie potrzeby
+                final String list_user_id = getRef(position).getKey();              //id konkretnego useraz listy
 
 
-                mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
+                mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {     //ustawianie wartości dla konkretnego id usera na liście
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
