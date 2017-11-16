@@ -274,12 +274,12 @@ public class ProfileActivity extends AppCompatActivity {
                     final String currentDate = DateFormat.getDateInstance().format(new Date());
 
                     //              ID (atualny użytkownik)     ID (inny użytkownik)
-                   mFriendDatabase.child(mCurrentUser.getUid()).child(user_id).setValue(currentDate)
+                   mFriendDatabase.child(mCurrentUser.getUid()).child(user_id).child("acceptdate").setValue(currentDate)
                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {
 
-                                   mFriendDatabase.child(user_id).child(mCurrentUser.getUid()).setValue(currentDate)
+                                   mFriendDatabase.child(user_id).child(mCurrentUser.getUid()).child(user_id).child("acceptdate").setValue(currentDate)
                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                @Override
                                                public void onSuccess(Void aVoid) {

@@ -53,7 +53,7 @@ public class FriendsFragment extends Fragment {
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
-        mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
+        mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mFriendsList.setHasFixedSize(true);
