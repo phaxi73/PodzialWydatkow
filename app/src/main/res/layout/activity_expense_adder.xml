@@ -53,8 +53,6 @@
         android:layout_width="346dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/adder_expense_btn"
@@ -67,9 +65,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/ile_zap_acono_pln"
+            android:inputType="numberDecimal"
             android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:inputType="numberDecimal"/>
+            android:textColorHint="@color/white" />
 
 
     </android.support.design.widget.TextInputLayout>

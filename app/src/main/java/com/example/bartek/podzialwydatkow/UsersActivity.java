@@ -36,14 +36,14 @@ public class UsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_users);
 
         //Toolbar
-        mToolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.users_toolbar);
+        mToolbar = findViewById(R.id.users_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Użytkownicy");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        mUsersList = (RecyclerView) findViewById(R.id.users_list);
+        mUsersList = findViewById(R.id.users_list);
         mUsersList.setHasFixedSize(true);
         mUsersList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -105,21 +105,21 @@ public class UsersActivity extends AppCompatActivity {
 
         public void setName(String name){
 
-            TextView mUserNameView = (TextView) mView.findViewById(R.id.user_single_name);  //Nazwa użytkownika
+            TextView mUserNameView = mView.findViewById(R.id.user_single_name);  //Nazwa użytkownika
             mUserNameView.setText(name);
 
         }
 
         public void setUserEmail (String email){
 
-            TextView userEmaiView = (TextView) mView.findViewById(R.id.user_single_email);  //Hasło
+            TextView userEmaiView = mView.findViewById(R.id.user_single_email);  //Hasło
             userEmaiView.setText(email);
 
         }
 
         public void setUserImage (String thumb_image, Context ctx){                         //Uzywam sub class, więc muszę podać context z populateViewHolder
 
-            CircleImageView userImageView = (CircleImageView) mView.findViewById(R.id.user_single_image);
+            CircleImageView userImageView = mView.findViewById(R.id.user_single_image);
 
             Picasso.with(ctx).load(thumb_image).placeholder(R.drawable.account_icon_orange).into(userImageView);
 
