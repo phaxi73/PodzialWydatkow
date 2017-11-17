@@ -267,19 +267,19 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
 
-                // ----------------- OTRZYMANE ZAPROSZENIE - aktualny stan: "req_received" -------------------------------------------------------------------------------------
+                // ----------------- OTRZYMANE ZAPROSZENIE - aktualny stan: "req_received"  - DODAWANIE DO ZNAJOMYCH W BAZIE ------------------------------------------------------------------
 
                 if(mCurrent_state.equals("req_received")){
 
                     final String currentDate = DateFormat.getDateInstance().format(new Date());
 
                     //              ID (atualny użytkownik)     ID (inny użytkownik)
-                   mFriendDatabase.child(mCurrentUser.getUid()).child(user_id).child("acceptdate").setValue(currentDate)
+                   mFriendDatabase.child(mCurrentUser.getUid()).child(user_id).child("acceptdateY").setValue(currentDate)
                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {
 
-                                   mFriendDatabase.child(user_id).child(mCurrentUser.getUid()).child(user_id).child("acceptdate").setValue(currentDate)
+                                   mFriendDatabase.child(user_id).child(mCurrentUser.getUid()).child("acceptdateX").setValue(currentDate)
                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                @Override
                                                public void onSuccess(Void aVoid) {
