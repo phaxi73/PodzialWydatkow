@@ -1,7 +1,9 @@
 package com.example.bartek.podzialwydatkow;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
 
     private TextView mCreatorExpenseName;
     private TextView mCreatorAmount;
+
 
     private DatabaseReference mExpensesDatabase;
 
@@ -45,6 +48,7 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
         mCreatorExpenseName = findViewById(R.id.creator_expense_name);
         mCreatorAmount = findViewById(R.id.creator_expense_amount);
 
+
         final String expensekey = getIntent().getStringExtra("expensekey");
         final String user_id = getIntent().getStringExtra("user_id");
 
@@ -65,6 +69,8 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
                             .child(expensekey)
                             .child("amount").getValue().toString();
 
+
+
                     mCreatorExpenseName.setText(expense_name);
                     mCreatorAmount.setText(amount + " zł");
 
@@ -83,5 +89,10 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
 
 
 
+
+
+
     }
+
+
 }

@@ -43,15 +43,15 @@
         <activity
             android:name=".ProfileActivity"
             android:parentActivityName=".UsersActivity" />
-
-        <activity android:name=".ExpenseCreatorActivity"
-            android:parentActivityName=".MainActivity"/>
-
-        <activity android:name=".ExpenseAdderActivity"
-            android:parentActivityName=".MainActivity">
-
-
-        </activity>
+        <activity
+            android:name=".ExpenseCreatorActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ExpenseAdderActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".PayerActivity"
+            android:parentActivityName=".ExpenseAdderActivity" />
     </application>
 
 </manifest>

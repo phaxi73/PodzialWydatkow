@@ -69,7 +69,7 @@ public class UsersActivity extends AppCompatActivity {
                 usersViewHolder.setUserEmail(users.getEmail());                                           //Pobiera email
                 usersViewHolder.setUserImage(users.getThumb_image(), getApplicationContext());            //Pobiera thumb_image, context dla UserViewHolder (wyswietlanie na liście)
 
-                final String user_id = getRef(position).getKey();                                               //Pozycja (gdzie user tapuje, tutaj- na layout pojedynczego usera)
+                final String user_id = getRef(position).getKey();                                               //Pozycja (Dane z miejsca, gdzie user tapuje, tutaj- na layout pojedynczego konretnego usera)
                 final String name = getRef(position).getKey();
 
                 usersViewHolder.mView.setOnClickListener(new View.OnClickListener() {                     //mView definiuje cały users_single_layout

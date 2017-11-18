@@ -1,6 +1,7 @@
 package com.example.bartek.podzialwydatkow;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -22,8 +23,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -31,19 +35,30 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.view.View.VISIBLE;
+
 public class ExpenseAdderActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar mToolbar;
 
     private TextInputLayout mExpenseName;
     private TextInputLayout mAmount;
-    private Button mExpenseBtn;
+    private Button mWhopaidBtn;
+    private TextView mPayerBtn;
+    private TextView mPayerTxt;
+    private TextView mWhenPaidTxt;
+    private Button mIpaidBtn;
 
     private ProgressDialog mAddProgress;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser mCurrentUser;
+
 
     private DatabaseReference mExpensesDatabase;
+    private DatabaseReference mUsersDatabase;
+    private DatabaseReference mCurrentUserName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +70,31 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Nowy wydatek");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        mCurrentUserName = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid()).child("name");
 
         mAddProgress = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
 
+        final String name = getIntent().getStringExtra("name");
+        final String user_id = getIntent().getStringExtra("user_id");
+
         mExpenseName = findViewById(R.id.adder_expense_name);
         mAmount = findViewById(R.id.adder_expense_amount);
+        mPayerBtn = findViewById(R.id.adder_payer_btn);
 
-        mExpenseBtn = findViewById(R.id.adder_expense_btn);
 
-        mExpenseBtn.setOnClickListener(new View.OnClickListener() {
+        mPayerTxt = findViewById(R.id.adder_payer_text);
+        mWhenPaidTxt = findViewById(R.id.adder_whenpaid_txt);
+        mPayerTxt.setVisibility(View.INVISIBLE);
+        mWhenPaidTxt.setVisibility(View.INVISIBLE);
+
+        mWhopaidBtn = findViewById(R.id.adder_expense_btn);
+        mIpaidBtn = findViewById(R.id.adder_payer_me);
+
+        mWhopaidBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -89,9 +119,68 @@ public class ExpenseAdderActivity extends AppCompatActivity {
             }
         });
 
+        // --- WYBIERANIE PLACACEGO Z LISTY ZNAJOMYCH ---
+        mPayerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent payer = new Intent(ExpenseAdderActivity.this, PayerActivity.class);
+                startActivity(payer);
+
+            }
+        });
+
+
+        // --- WYBIERANIE ZALOGOWANEWGO UZYTKOWNIKA JAKO PLACACEGO ---
+        mCurrentUserName.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                final String current_user_name = dataSnapshot.getValue().toString();
+
+
+                mIpaidBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        mPayerTxt.setText(current_user_name);
+
+                        mPayerTxt.setVisibility(VISIBLE);
+                        mWhenPaidTxt.setVisibility(VISIBLE);
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                //Error
+
+            }
+        });
+
+
+
+
+        // --- KTO ZAPLACIL WYSWIETLANIE ---
+        mPayerTxt.setText(name);
+
+        if(!TextUtils.isEmpty(mPayerTxt.getText().toString())){
+
+            mPayerTxt.setVisibility(VISIBLE);
+            mWhenPaidTxt.setVisibility(VISIBLE);
+
+        }
+
+
+
+
     }
 
     private void    add_expense(final String expensename, String amount){
+
 
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
         String uid  = current_user.getUid();
@@ -120,6 +209,9 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 
 
 
