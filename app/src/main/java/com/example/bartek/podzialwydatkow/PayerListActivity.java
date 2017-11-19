@@ -39,6 +39,8 @@ public class PayerListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payer);
 
+
+
         //Toolbar
         mToolbar = findViewById(R.id.users_toolbar);
         setSupportActionBar(mToolbar);
@@ -60,6 +62,7 @@ public class PayerListActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     protected void onStart() {
