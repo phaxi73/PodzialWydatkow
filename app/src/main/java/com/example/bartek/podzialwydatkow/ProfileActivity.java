@@ -85,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
         mCurrent_state = "not_friends";
 
 
-        mUsersDatabase.addValueEventListener(new ValueEventListener() {                                    //Odbieram dane przy użyciu data snapshot
+        mUsersDatabase.addValueEventListener(new ValueEventListener() {                                    //Odbieram dane przy użyciu data snapshota
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -274,12 +274,12 @@ public class ProfileActivity extends AppCompatActivity {
                     final String currentDate = DateFormat.getDateInstance().format(new Date());
 
                     //              ID (atualny użytkownik)     ID (inny użytkownik)
-                   mFriendDatabase.child(mCurrentUser.getUid()).child(user_id).child("acceptdateY").setValue(currentDate)
+                   mFriendDatabase.child(mCurrentUser.getUid()).child(user_id).child("acceptdate").setValue(currentDate)
                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                @Override
                                public void onSuccess(Void aVoid) {
 
-                                   mFriendDatabase.child(user_id).child(mCurrentUser.getUid()).child("acceptdateX").setValue(currentDate)
+                                   mFriendDatabase.child(user_id).child(mCurrentUser.getUid()).child("acceptdate").setValue(currentDate)
                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                @Override
                                                public void onSuccess(Void aVoid) {

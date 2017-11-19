@@ -10,16 +10,18 @@ public class Users {
     public String image;
     public String email;
     public String thumb_image;
+    public String user_id;
 
     public Users (){
 
     }
 
-    public Users(String name, String image, String email) {  //Konstruktory
+    public Users(String name, String image, String email, String user_id) {  //Konstruktory
         this.name = name;
         this.image = image;
         this.email = email;
         this.thumb_image = thumb_image;
+        this.user_id = user_id;
     }
 
     //Gettery i settery
@@ -50,4 +52,12 @@ public class Users {
 
     public String getThumb_image() {return thumb_image;}
     public void setThumb_image(String thumb_image) {this.thumb_image = thumb_image;}
+
+    public String getUser_id() {
+        return user_id;
+    }
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
 }

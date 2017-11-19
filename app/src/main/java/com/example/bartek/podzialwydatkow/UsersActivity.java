@@ -79,6 +79,7 @@ public class UsersActivity extends AppCompatActivity {
                         Intent profile_intent = new Intent(UsersActivity.this, ProfileActivity.class);
                         profile_intent.putExtra("user_id", user_id);                               //Wysyłam user_id do innej strony (ProfileActivity.class)
                         profile_intent.putExtra("name", name);
+
                         startActivity(profile_intent);
                     }
                 });

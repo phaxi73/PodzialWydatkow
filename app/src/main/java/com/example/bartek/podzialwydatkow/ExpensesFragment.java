@@ -1,10 +1,8 @@
 package com.example.bartek.podzialwydatkow;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -96,7 +94,7 @@ public class ExpensesFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
 
-                        Intent expensecreator_intent = new Intent(getActivity(), ExpenseCreatorActivity.class);
+                        Intent expensecreator_intent = new Intent(getActivity(), ExpenseDetailsActivity.class);
                         expensecreator_intent.putExtra("expensemame", expensename);
                         expensecreator_intent.putExtra("expensekey", expensekey);
                         expensecreator_intent.putExtra("user_id", user_id);

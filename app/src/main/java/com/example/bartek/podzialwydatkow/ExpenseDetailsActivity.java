@@ -1,10 +1,7 @@
 package com.example.bartek.podzialwydatkow;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,12 +12,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ExpenseCreatorActivity extends AppCompatActivity {
+public class ExpenseDetailsActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar mToolbar;
 
     private TextView mCreatorExpenseName;
     private TextView mCreatorAmount;
+    private TextView mCreatorPayer;
 
 
     private DatabaseReference mExpensesDatabase;
@@ -32,7 +30,7 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_expense_creator);
+        setContentView(R.layout.activity_expense_details);
 
         mToolbar = findViewById(R.id.expensecreator_toolbar);
         setSupportActionBar(mToolbar);
@@ -47,6 +45,7 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
 
         mCreatorExpenseName = findViewById(R.id.creator_expense_name);
         mCreatorAmount = findViewById(R.id.creator_expense_amount);
+        mCreatorPayer = findViewById(R.id.creator_expense_payer);
 
 
         final String expensekey = getIntent().getStringExtra("expensekey");
@@ -69,10 +68,16 @@ public class ExpenseCreatorActivity extends AppCompatActivity {
                             .child(expensekey)
                             .child("amount").getValue().toString();
 
+                    String payer = dataSnapshot
+                            .child("expense")
+                            .child(expensekey)
+                            .child("payer").getValue().toString();
+
 
 
                     mCreatorExpenseName.setText(expense_name);
                     mCreatorAmount.setText(amount + " zł");
+                    mCreatorPayer.setText(payer);
 
 
                 }

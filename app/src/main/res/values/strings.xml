@@ -36,6 +36,11 @@
     <string name="ja">Ja</string>
     <string name="user_id">user_id</string>
     <string name="zap_aci">Zapłacił:</string>
+    <string name="zap_acidot" />
+    <string name="zap_aconodot" />
+    <string name="wydatekdot" />
+    <string name="welcome_screen_text">Witaj w aplikacji Podział Wydatków!</string>
+    <string name="welcometext">Witaj w aplikacji  Podział Wydatków!</string>
 
 
 </resources>

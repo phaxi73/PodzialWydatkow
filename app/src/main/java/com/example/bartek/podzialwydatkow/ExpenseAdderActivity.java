@@ -1,21 +1,14 @@
 package com.example.bartek.podzialwydatkow;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static android.view.View.VISIBLE;
 
@@ -47,6 +36,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
     private TextView mPayerBtn;
     private TextView mPayerTxt;
     private TextView mWhenPaidTxt;
+    private TextView mPayerChosenTxt;
     private Button mIpaidBtn;
 
     private ProgressDialog mAddProgress;
@@ -71,6 +61,10 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+        final String name = getIntent().getStringExtra("name");
+        final String user_id = getIntent().getStringExtra("user_id");
+
+
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -78,8 +72,6 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
         mAddProgress = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
 
-        final String name = getIntent().getStringExtra("name");
-        final String user_id = getIntent().getStringExtra("user_id");
 
         mExpenseName = findViewById(R.id.adder_expense_name);
         mAmount = findViewById(R.id.adder_expense_amount);
@@ -90,6 +82,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         mWhenPaidTxt = findViewById(R.id.adder_whenpaid_txt);
         mPayerTxt.setVisibility(View.INVISIBLE);
         mWhenPaidTxt.setVisibility(View.INVISIBLE);
+        mPayerChosenTxt = findViewById(R.id.adder_whenpaid_txt);
 
         mWhopaidBtn = findViewById(R.id.adder_expense_btn);
         mIpaidBtn = findViewById(R.id.adder_payer_me);
@@ -100,15 +93,18 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
                 String expense_name = mExpenseName.getEditText().getText().toString();
                 String amount = mAmount.getEditText().getText().toString();
+                String user_name = mPayerTxt.getText().toString();
 
 
-                if(!TextUtils.isEmpty(expense_name) && (!TextUtils.isEmpty(amount))){
+                if(!TextUtils.isEmpty(expense_name) &&
+                  (!TextUtils.isEmpty(amount) &&
+                  (mPayerChosenTxt.getVisibility() == View.VISIBLE))){
 
                     mAddProgress.setTitle("Dodawanie wydatku");
                     mAddProgress.setMessage("Proszę czekać...");
                     mAddProgress.setCanceledOnTouchOutside(false);
                     mAddProgress.show();
-                    add_expense(expense_name, amount);
+                    add_expense(expense_name, amount, user_name);
 
                 } else {
 
@@ -119,12 +115,14 @@ public class ExpenseAdderActivity extends AppCompatActivity {
             }
         });
 
+
+
         // --- WYBIERANIE PLACACEGO Z LISTY ZNAJOMYCH ---
         mPayerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent payer = new Intent(ExpenseAdderActivity.this, PayerActivity.class);
+                Intent payer = new Intent(ExpenseAdderActivity.this, PayerListActivity.class);
                 startActivity(payer);
 
             }
@@ -162,24 +160,47 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         });
 
 
-
-
         // --- KTO ZAPLACIL WYSWIETLANIE ---
-        mPayerTxt.setText(name);
+        if(user_id != null) {
 
-        if(!TextUtils.isEmpty(mPayerTxt.getText().toString())){
+            mUsersDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-            mPayerTxt.setVisibility(VISIBLE);
-            mWhenPaidTxt.setVisibility(VISIBLE);
+                    if(dataSnapshot.hasChild(user_id)){
+
+                    String user_name = dataSnapshot
+                            .child(user_id)
+                            .child("name").getValue().toString();
+
+                    mPayerTxt.setText(user_name);
+
+                    }
+
+                    if (!TextUtils.isEmpty(mPayerTxt.getText().toString())) {
+
+                        mPayerTxt.setVisibility(VISIBLE);
+                        mWhenPaidTxt.setVisibility(VISIBLE);
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                    //Error
+
+                }
+            });
 
         }
 
 
 
-
     }
 
-    private void    add_expense(final String expensename, String amount){
+    private void    add_expense(final String expensename, String amount, String user_name){
 
 
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
@@ -191,6 +212,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         HashMap<String, String> expenseMap = new HashMap<>();
         expenseMap.put("expensename", expensename);
         expenseMap.put("amount", amount);
+        expenseMap.put("payer", user_name);
 
         mExpensesDatabase.setValue(expenseMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

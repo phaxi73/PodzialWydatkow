@@ -20,12 +20,13 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PayerActivity extends AppCompatActivity {
+public class PayerListActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar mToolbar;
 
     private RecyclerView mPayerList;
     private DatabaseReference mUsersDatabase;
+    private DatabaseReference mUserIdDatabase;
 
     private DatabaseReference mFriendsDatabase;
     private FirebaseAuth mAuth;
@@ -44,6 +45,7 @@ public class PayerActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Kto zapłacił?");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
@@ -53,6 +55,8 @@ public class PayerActivity extends AppCompatActivity {
         mPayerList = findViewById(R.id.payer_list);
         mPayerList.setHasFixedSize(true);
         mPayerList.setLayoutManager(new LinearLayoutManager(this));
+
+
 
 
     }
@@ -80,7 +84,8 @@ public class PayerActivity extends AppCompatActivity {
                 final String user_id = getRef(position).getKey();
                 final String name = getRef(position).getKey();
 
-                mUsersDatabase.child(user_id).addValueEventListener(new ValueEventListener() {     //ustawianie wartości dla konkretnego id usera na liście
+
+                mUsersDatabase.child(user_id).addValueEventListener(new ValueEventListener() {       //ustawianie wartości dla konkretnego id usera na liście
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -88,27 +93,28 @@ public class PayerActivity extends AppCompatActivity {
                         String setUserImage = dataSnapshot.child("thumb_image").getValue().toString();
                         String userEmail = dataSnapshot.child("email").getValue().toString();
 
-                        PayerViewHolder.setName(userName);
-                        PayerViewHolder.setUserImage(setUserImage, getApplicationContext());
-                        PayerViewHolder.setEmail(userEmail);
+                        PayerViewHolder.setName(userName);                                           //Wyświetlanie
+                        PayerViewHolder.setUserImage(setUserImage, getApplicationContext());         //na liście
+                        PayerViewHolder.setEmail(userEmail);                                         //wyboru płacącego
 
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
+                        //Error
                     }
                 });
+
 
                 PayerViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        Intent payer_intent = new Intent (PayerActivity.this, ExpenseAdderActivity.class);
-                        payer_intent.putExtra("user_id", user_id);
-                        payer_intent.putExtra("name", name);
-
-                        startActivity(payer_intent);
+                        Intent expense_adder = new Intent (PayerListActivity.this, ExpenseAdderActivity.class);
+                        expense_adder.putExtra("user_id", user_id);
+                        expense_adder.putExtra("name", name);
+                        startActivity(expense_adder);
 
                     }
                 });
@@ -119,23 +125,6 @@ public class PayerActivity extends AppCompatActivity {
         mPayerList.setAdapter(firebaseRecyclerAdapter);
     }
 
-    /*
-    public class Payer{
-
-        Context payer_context;
-        public Payer(Context payer_context){
-
-            this.payer_context=payer_context;
-        }
-
-        public void Update(){
-
-            TextView mPayer = ((ExpenseAdderActivity)payer_context).findViewById(R.id.adder_payer_text);
-            mPayer.setText(user_id);
-        }
-
-    }
-    */
 
     public static class PayerViewHolder extends RecyclerView.ViewHolder{
 
