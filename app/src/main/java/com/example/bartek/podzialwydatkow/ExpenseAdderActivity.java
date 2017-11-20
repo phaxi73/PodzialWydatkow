@@ -55,6 +55,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_adder);
 
+
         mToolbar = findViewById(R.id.newexpense_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Nowy wydatek");
@@ -117,12 +118,14 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
 
 
+
         // --- WYBIERANIE PLACACEGO Z LISTY ZNAJOMYCH ---
         mPayerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent payer = new Intent(ExpenseAdderActivity.this, PayerListActivity.class);
+
                 startActivity(payer);
 
             }
@@ -199,6 +202,8 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
 
     }
+
+
 
     private void    add_expense(final String expensename, String amount, String user_name){
 
