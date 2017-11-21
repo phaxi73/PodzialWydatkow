@@ -52,6 +52,11 @@
         <activity
             android:name=".PayerListActivity"
             android:parentActivityName=".ExpenseAdderActivity" />
+
+        <activity android:name=".SplitListActivity"
+            android:parentActivityName=".MainActivity"/>
+
+
     </application>
 
 </manifest>

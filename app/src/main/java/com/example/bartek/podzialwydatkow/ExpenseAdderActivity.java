@@ -3,6 +3,7 @@ package com.example.bartek.podzialwydatkow;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
     private TextView mPayerChosenTxt;
     private Button mIpaidBtn;
 
+
     private ProgressDialog mAddProgress;
 
     private FirebaseAuth mAuth;
@@ -55,16 +57,13 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_adder);
 
-
         mToolbar = findViewById(R.id.newexpense_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Nowy wydatek");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         final String name = getIntent().getStringExtra("name");
         final String user_id = getIntent().getStringExtra("user_id");
-
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
@@ -73,11 +72,9 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
         mAddProgress = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
 
-
         mExpenseName = findViewById(R.id.adder_expense_name);
         mAmount = findViewById(R.id.adder_expense_amount);
         mPayerBtn = findViewById(R.id.adder_payer_btn);
-
 
         mPayerTxt = findViewById(R.id.adder_payer_text);
         mWhenPaidTxt = findViewById(R.id.adder_whenpaid_txt);
@@ -107,6 +104,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                     mAddProgress.show();
                     add_expense(expense_name, amount, user_name);
 
+
                 } else {
 
                     Toast.makeText(ExpenseAdderActivity.this, "Uzupełnij puste pola!", Toast.LENGTH_SHORT).show();
@@ -115,8 +113,6 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
             }
         });
-
-
 
 
         // --- WYBIERANIE PLACACEGO Z LISTY ZNAJOMYCH ---
@@ -227,8 +223,11 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
                     mAddProgress.dismiss();
 
-                    Intent mainIntent = new Intent(ExpenseAdderActivity.this, MainActivity.class);
-                    startActivity(mainIntent);
+                    //Intent mainIntent = new Intent(ExpenseAdderActivity.this, MainActivity.class);
+                    //startActivity(mainIntent);
+
+                    Intent splitactivity = new Intent(ExpenseAdderActivity.this, SplitListActivity.class);
+                    startActivity(splitactivity);
 
                 }
 
@@ -236,6 +235,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         });
 
     }
+
 
 
 
