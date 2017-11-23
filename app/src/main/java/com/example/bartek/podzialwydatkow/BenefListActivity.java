@@ -1,7 +1,11 @@
 package com.example.bartek.podzialwydatkow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,7 +45,6 @@ public class BenefListActivity extends AppCompatActivity {
 
     private String mCurrent_user_id;
 
-    private int state = 0;
 
 
     @Override
@@ -87,7 +90,9 @@ public class BenefListActivity extends AppCompatActivity {
                         mFriendsDatabase
                 )
 
+
         {
+
             @Override
             protected void populateViewHolder(final PayerViewHolder PayerViewHolder, final Friends friends, int position) {
 
@@ -124,10 +129,9 @@ public class BenefListActivity extends AppCompatActivity {
 
 
                 PayerViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("ResourceAsColor")
                     @Override
                     public void onClick(View view) {
-
-                        if (state == 0) {
 
                             final String expensekey = getIntent().getStringExtra("expensekey");
 
@@ -152,26 +156,30 @@ public class BenefListActivity extends AppCompatActivity {
 
                                     if (task.isSuccessful()) {
 
-                                        Toast.makeText(BenefListActivity.this, "Dodano do korzystających", Toast.LENGTH_SHORT).show();
+                                       //
 
                                     }
 
                                 }
                             });
 
-                            state = 1;
+                            PayerViewHolder.mView.setBackgroundColor(Color.rgb(255,201,71));
 
-                        }
+                    }
 
-                        else if (state == 1)
-                        {
-                            mExpensesDatabase.child(user_id).removeValue();
+                });
 
-                            state = 0;
+                PayerViewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
 
-                            Toast.makeText(BenefListActivity.this, "Usunięto z korzystających", Toast.LENGTH_SHORT).show();
-                        }
+                        mExpensesDatabase.child(user_id).removeValue();
 
+                        PayerViewHolder.mView.setBackgroundColor(Color.rgb(63, 81, 181));
+
+
+
+                        return true;
                     }
                 });
 

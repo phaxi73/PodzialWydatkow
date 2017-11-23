@@ -82,7 +82,7 @@ public class ExpensesFragment extends Fragment {
             protected void populateViewHolder(ExpensesViewHolder expensesViewHolder, Expenses expenses, int position) {
 
 
-                expensesViewHolder.setExpenseName(expenses.getExpensename());           //Bierze Expensename z klasy Expenses.java
+                expensesViewHolder.setExpenseName(expenses.getExpensename());           //Pobiera Expensename z klasy Expenses.java
                 //expensesViewHolder.setExpenseKey(expenses.getExpensekey());
                 //expensesViewHolder.setUser_id(expenses.getUser_id());
 
@@ -127,7 +127,7 @@ public class ExpensesFragment extends Fragment {
         public void setExpenseName(String expensename){
 
             TextView mExpenseNameView = mView.findViewById(R.id.expenses_single_expense);  //Nazwa wydatku
-            mExpenseNameView.setText("   •" + expensename);
+            mExpenseNameView.setText("   • " + expensename);
 
         }
 

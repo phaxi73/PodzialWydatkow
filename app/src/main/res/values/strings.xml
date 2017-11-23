@@ -42,6 +42,7 @@
     <string name="welcome_screen_text">Witaj w aplikacji Podział Wydatków!</string>
     <string name="welcometext">Witaj w aplikacji  Podział Wydatków!</string>
     <string name="dalej">Dalej</string>
+    <string name="user_email">User Email</string>
 
 
 </resources>
