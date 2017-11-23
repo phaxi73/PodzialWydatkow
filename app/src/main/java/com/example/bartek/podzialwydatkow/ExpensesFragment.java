@@ -94,11 +94,11 @@ public class ExpensesFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
 
-                        Intent expensecreator_intent = new Intent(getActivity(), ExpenseDetailsActivity.class);
-                        expensecreator_intent.putExtra("expensemame", expensename);
-                        expensecreator_intent.putExtra("expensekey", expensekey);
-                        expensecreator_intent.putExtra("user_id", user_id);
-                        startActivity(expensecreator_intent);
+                        Intent expensedetails_intent = new Intent(getActivity(), ExpenseDetailsActivity.class);
+                        expensedetails_intent.putExtra("expensemame", expensename);
+                        expensedetails_intent.putExtra("expensekey", expensekey);
+                        expensedetails_intent.putExtra("user_id", user_id);
+                        startActivity(expensedetails_intent);
 
                     }
                 });

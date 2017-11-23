@@ -53,7 +53,7 @@
             android:name=".PayerListActivity"
             android:parentActivityName=".ExpenseAdderActivity" />
 
-        <activity android:name=".SplitListActivity"
+        <activity android:name=".BenefListActivity"
             android:parentActivityName=".MainActivity"/>
 
 

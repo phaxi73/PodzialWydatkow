@@ -2,15 +2,20 @@ package com.example.bartek.podzialwydatkow;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,9 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class PayerListActivity extends AppCompatActivity {
+public class BenefListActivity extends AppCompatActivity {
 
     private android.support.v7.widget.Toolbar mToolbar;
 
@@ -29,6 +36,7 @@ public class PayerListActivity extends AppCompatActivity {
     private DatabaseReference mUserIdDatabase;
 
     private DatabaseReference mFriendsDatabase;
+    private DatabaseReference mExpensesDatabase;
     private FirebaseAuth mAuth;
 
     private String mCurrent_user_id;
@@ -44,7 +52,7 @@ public class PayerListActivity extends AppCompatActivity {
         //Toolbar
         mToolbar = findViewById(R.id.users_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Kto zapłacił?");
+        getSupportActionBar().setTitle("Kto skorzystał?");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -53,6 +61,7 @@ public class PayerListActivity extends AppCompatActivity {
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
         mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+
 
         mPayerList = findViewById(R.id.payer_list);
         mPayerList.setHasFixedSize(true);
@@ -71,14 +80,14 @@ public class PayerListActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<Friends, PayerViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, PayerViewHolder>
 
                 (Friends.class,
-                 R.layout.users_single_layout,
-                 PayerViewHolder.class,
-                 mFriendsDatabase
+                        R.layout.users_single_layout,
+                        PayerViewHolder.class,
+                        mFriendsDatabase
                 )
 
         {
             @Override
-            protected void populateViewHolder(final PayerViewHolder PayerViewHolder, Friends friends, int position) {
+            protected void populateViewHolder(final PayerViewHolder PayerViewHolder, final Friends friends, int position) {
 
                 PayerViewHolder.setName(friends.getName());
                 PayerViewHolder.setEmail(friends.getEmail());
@@ -95,6 +104,7 @@ public class PayerListActivity extends AppCompatActivity {
                         String userName = dataSnapshot.child("name").getValue().toString();
                         String setUserImage = dataSnapshot.child("thumb_image").getValue().toString();
                         String userEmail = dataSnapshot.child("email").getValue().toString();
+
 
                         PayerViewHolder.setName(userName);                                           //Wyświetlanie
                         PayerViewHolder.setUserImage(setUserImage, getApplicationContext());         //na liście
@@ -114,10 +124,29 @@ public class PayerListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        Intent expense_adder = new Intent (PayerListActivity.this, ExpenseAdderActivity.class);
-                        expense_adder.putExtra("user_id", user_id);
-                        expense_adder.putExtra("name", name);
-                        startActivity(expense_adder);
+                        final String expensekey = getIntent().getStringExtra("expensekey");
+
+                        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                        String uid  = current_user.getUid();
+
+                        mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses").child(uid).child("expense").child(expensekey).child("debtor");
+
+                        HashMap<String, Object> debtorsMap = new HashMap<>();
+                        debtorsMap.put(user_id, "false");
+
+                            mExpensesDatabase.updateChildren(debtorsMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                    if(task.isSuccessful()){
+
+                                        Toast.makeText(BenefListActivity.this, "Działa", Toast.LENGTH_LONG).show();
+
+                                    }
+
+                                }
+                            });
+
 
 
                     }

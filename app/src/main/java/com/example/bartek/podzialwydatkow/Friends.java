@@ -10,17 +10,19 @@ public class Friends {
     public String email;
     public String thumb_image;
     public String user_id;
+    public String expensekey;
 
     public Friends(){
 
     }
 
-    public Friends(String name, String email, String user_id) {  //Konstruktory
+    public Friends(String name, String email, String user_id, String expensekey) {  //Konstruktory
 
         this.name = name;
         this.email = email;
         this.thumb_image = thumb_image;
         this.user_id = user_id;
+        this.expensekey = expensekey;
 
     }
 
@@ -40,6 +42,7 @@ public class Friends {
         this.email = email;
     }
 
+
     public String getUser_id() {
         return user_id;
     }
@@ -54,5 +57,9 @@ public class Friends {
     public void setThumb_image(String thumb_image) {
         this.thumb_image = thumb_image;
     }
+
+
+    public String getExpensekey() {return expensekey;}
+    public void setExpensekey(String expensekey) {this.expensekey = expensekey;}
 
 }

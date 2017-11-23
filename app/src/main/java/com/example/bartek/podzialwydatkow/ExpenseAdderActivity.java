@@ -3,7 +3,6 @@ package com.example.bartek.podzialwydatkow;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -98,10 +97,10 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                   (!TextUtils.isEmpty(amount) &&
                   (mPayerChosenTxt.getVisibility() == View.VISIBLE))){
 
-                    mAddProgress.setTitle("Dodawanie wydatku");
-                    mAddProgress.setMessage("Proszę czekać...");
-                    mAddProgress.setCanceledOnTouchOutside(false);
-                    mAddProgress.show();
+                   // mAddProgress.setTitle("Dodawanie wydatku");
+                    //mAddProgress.setMessage("Proszę czekać...");
+                    //mAddProgress.setCanceledOnTouchOutside(false);
+                    //mAddProgress.show();
                     add_expense(expense_name, amount, user_name);
 
 
@@ -201,7 +200,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
 
 
-    private void    add_expense(final String expensename, String amount, String user_name){
+    private void add_expense (final String expensename, String amount, String user_name) {
 
 
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
@@ -210,10 +209,12 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses").child(uid).child("expense").push();
 
 
+
         HashMap<String, String> expenseMap = new HashMap<>();
-        expenseMap.put("expensename", expensename);
-        expenseMap.put("amount", amount);
-        expenseMap.put("payer", user_name);
+        final String key = mExpensesDatabase.getKey().toString();
+        String testname = expenseMap.put("expensename", expensename);
+        String testamount = expenseMap.put("amount", amount);
+        String testpayer = expenseMap.put("payer", user_name);
 
         mExpensesDatabase.setValue(expenseMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -221,12 +222,10 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
                 if(task.isSuccessful()){
 
-                    mAddProgress.dismiss();
+                    //mAddProgress.dismiss();
 
-                    //Intent mainIntent = new Intent(ExpenseAdderActivity.this, MainActivity.class);
-                    //startActivity(mainIntent);
-
-                    Intent splitactivity = new Intent(ExpenseAdderActivity.this, SplitListActivity.class);
+                    Intent splitactivity = new Intent(ExpenseAdderActivity.this, BenefListActivity.class);
+                    splitactivity.putExtra("expensekey", key);
                     startActivity(splitactivity);
 
                 }
