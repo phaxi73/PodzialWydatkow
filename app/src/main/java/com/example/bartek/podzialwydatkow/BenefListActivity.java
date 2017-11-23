@@ -41,6 +41,8 @@ public class BenefListActivity extends AppCompatActivity {
 
     private String mCurrent_user_id;
 
+    private int state = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,34 +122,55 @@ public class BenefListActivity extends AppCompatActivity {
                 });
 
 
+
                 PayerViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        final String expensekey = getIntent().getStringExtra("expensekey");
+                        if (state == 0) {
 
-                        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-                        String uid  = current_user.getUid();
+                            final String expensekey = getIntent().getStringExtra("expensekey");
 
-                        mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses").child(uid).child("expense").child(expensekey).child("debtor");
+                            FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                            String uid = current_user.getUid();
 
-                        HashMap<String, Object> debtorsMap = new HashMap<>();
-                        debtorsMap.put(user_id, "false");
+                            mExpensesDatabase = FirebaseDatabase.getInstance().getReference()
+                                    .child("Expenses")
+                                    .child(uid)
+                                    .child("expense")
+                                    .child(expensekey)
+                                    .child("debtor");
+
+                            HashMap<String, Object> debtorsMap = new HashMap<>();
+                            debtorsMap.put(user_id, "false");
+
 
                             mExpensesDatabase.updateChildren(debtorsMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 
-                                    if(task.isSuccessful()){
 
-                                        Toast.makeText(BenefListActivity.this, "Działa", Toast.LENGTH_LONG).show();
+                                    if (task.isSuccessful()) {
+
+                                        Toast.makeText(BenefListActivity.this, "Dodano do korzystających", Toast.LENGTH_SHORT).show();
 
                                     }
 
                                 }
                             });
 
+                            state = 1;
 
+                        }
+
+                        else if (state == 1)
+                        {
+                            mExpensesDatabase.child(user_id).removeValue();
+
+                            state = 0;
+
+                            Toast.makeText(BenefListActivity.this, "Usunięto z korzystających", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 });
