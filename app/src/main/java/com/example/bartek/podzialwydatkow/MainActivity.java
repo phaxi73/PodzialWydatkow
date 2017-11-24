@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
             sendToStart();
 
         }
+
+
     }
 
     //Metoda przenosząca do startActivity

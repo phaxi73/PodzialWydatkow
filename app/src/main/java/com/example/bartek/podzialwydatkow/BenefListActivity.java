@@ -31,9 +31,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static java.lang.Math.toIntExact;
 
 public class BenefListActivity extends AppCompatActivity {
 
@@ -46,6 +49,8 @@ public class BenefListActivity extends AppCompatActivity {
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mExpensesDatabase;
     private DatabaseReference mExpensesDatabaseExName;
+    private DatabaseReference mExpensesDatabaseCheck;
+    private DatabaseReference mExpensesDatabaseUserId;
     private FirebaseAuth mAuth;
 
     private String mCurrent_user_id;
@@ -55,7 +60,7 @@ public class BenefListActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beneflist);
 
@@ -85,8 +90,32 @@ public class BenefListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent homeactivity = new Intent(BenefListActivity.this, MainActivity.class);
-                startActivity(homeactivity);
+                /*
+                final String expensename = getIntent().getStringExtra("expensename");
+                final String expensekey = getIntent().getStringExtra("expensekey");
+                final String amount = getIntent().getStringExtra("amount");
+
+
+                mExpensesDatabaseCheck = FirebaseDatabase.getInstance().getReference()
+                        .child("Expenses")
+                        .child(uid)
+                        .child("expense")
+                        .child(expensekey)
+                        .child("debtor");
+
+                if(--- W DEBTOR COS JEST, TO WYKONAJ)
+                */
+
+
+                //if(mExpensesDatabaseUserId != null) {
+
+
+                    Intent homeactivity = new Intent(BenefListActivity.this, MainActivity.class);
+                    startActivity(homeactivity);
+
+                    //JESLI NIE, TOAST, ŻE TRZEBA DODAC KORZYSTAJACYCH
+
+                //}
 
             }
         });
@@ -100,6 +129,8 @@ public class BenefListActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+
 
         FirebaseRecyclerAdapter<Friends, PayerViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, PayerViewHolder>
 
@@ -147,18 +178,41 @@ public class BenefListActivity extends AppCompatActivity {
 
 
 
-
                 PayerViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @SuppressLint("ResourceAsColor")
                     @Override
                     public void onClick(View view) {
 
+                        final String expensekey = getIntent().getStringExtra("expensekey");
+                        final String amount = getIntent().getStringExtra("amount");
 
-                            final String expensekey = getIntent().getStringExtra("expensekey");
+                        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+                        final String uid = current_user.getUid();
 
-                            FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-                            final String uid = current_user.getUid();
 
+                        if(mExpensesDatabase != null) {
+                            mExpensesDatabase.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    long debtorscounter = dataSnapshot.getChildrenCount();
+                                    int intdebtorscounter = new BigDecimal(debtorscounter).intValueExact();    //Ilość korzystyjących (int)
+
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                    //Error
+
+                                }
+                            });
+                        }
+
+
+                            int intamount = Integer.parseInt(amount);
 
 
                             mExpensesDatabase = FirebaseDatabase.getInstance().getReference()
@@ -171,7 +225,7 @@ public class BenefListActivity extends AppCompatActivity {
 
 
                             HashMap<String, Object> debtorsMap = new HashMap<>();
-                            debtorsMap.put(user_id, "false");
+                            debtorsMap.put(user_id, intamount);
 
 
                             mExpensesDatabase.updateChildren(debtorsMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -191,6 +245,15 @@ public class BenefListActivity extends AppCompatActivity {
                             PayerViewHolder.mView.setBackgroundColor(Color.rgb(255,201,71));
 
 
+                            mExpensesDatabaseUserId = FirebaseDatabase.getInstance().getReference()
+                                .child("Expenses")
+                                .child(uid)
+                                .child("expense")
+                                .child(expensekey)
+                                .child("debtor")
+                                .child(user_id);
+
+
 
                     }
 
@@ -205,8 +268,6 @@ public class BenefListActivity extends AppCompatActivity {
 
                         PayerViewHolder.mView.setBackgroundColor(Color.rgb(63, 81, 181));
 
-
-
                         return true;
                     }
                 });
@@ -215,6 +276,8 @@ public class BenefListActivity extends AppCompatActivity {
         };
 
         mPayerList.setAdapter(firebaseRecyclerAdapter);
+
+
     }
 
 
