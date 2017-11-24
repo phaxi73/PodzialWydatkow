@@ -1,12 +1,15 @@
 package com.example.bartek.podzialwydatkow;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -114,6 +117,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         });
 
 
+
         // --- WYBIERANIE PLACACEGO Z LISTY ZNAJOMYCH ---
         mPayerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,11 +204,11 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
 
 
-    private void add_expense (final String expensename, String amount, String user_name) {
+    private void add_expense (final String expensename, final String amount, String user_name) {
 
 
         FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid  = current_user.getUid();
+        final String uid  = current_user.getUid();
 
         mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses").child(uid).child("expense").push();
 
@@ -224,9 +228,12 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
                     //mAddProgress.dismiss();
 
-                    Intent splitactivity = new Intent(ExpenseAdderActivity.this, BenefListActivity.class);
-                    splitactivity.putExtra("expensekey", key);
-                    startActivity(splitactivity);
+                    Intent benefactivity = new Intent(ExpenseAdderActivity.this, BenefListActivity.class);
+                    benefactivity.putExtra("expensename", expensename);
+                    benefactivity.putExtra("expensekey", key);
+                    benefactivity.putExtra("userid", uid);
+                    benefactivity.putExtra("amount", amount);
+                    startActivity(benefactivity);
 
                 }
 
@@ -235,8 +242,44 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setTitle("Powrót")
+                .setIcon(R.drawable.ic_warning_purple_48dp)
+                .setMessage("Czy na pewno chcesz wrócić? Zmiany nie zostaną zapisane.")
+                .setNegativeButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                }).setPositiveButton("Nie", null).show();
+    }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                new AlertDialog.Builder(this).setTitle("Powrót")
+                        .setIcon(R.drawable.ic_warning_purple_48dp)
+                        .setMessage("Czy na pewno chcesz wrócić? Zmiany nie zostaną zapisane.")
+                        .setNegativeButton("Tak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                                Intent gohome = new Intent(ExpenseAdderActivity.this, MainActivity.class);
+                                startActivity(gohome);
+
+                            }
+                        }).setPositiveButton("Nie", null).show();
+
+
+
+                break;
+        }
+        return true;
+    }
 
 
 

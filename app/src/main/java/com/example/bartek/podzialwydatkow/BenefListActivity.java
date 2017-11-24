@@ -2,16 +2,20 @@ package com.example.bartek.podzialwydatkow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,16 +45,19 @@ public class BenefListActivity extends AppCompatActivity {
 
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mExpensesDatabase;
+    private DatabaseReference mExpensesDatabaseExName;
     private FirebaseAuth mAuth;
 
     private String mCurrent_user_id;
+    private Button mHome_btn;
+
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payer);
+        setContentView(R.layout.activity_beneflist);
 
 
 
@@ -58,10 +65,11 @@ public class BenefListActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.users_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Kto skorzystał?");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         mAuth = FirebaseAuth.getInstance();
+
+        mHome_btn = findViewById(R.id.beneflist_home_btn);
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
         mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
@@ -73,9 +81,20 @@ public class BenefListActivity extends AppCompatActivity {
         mPayerList.setLayoutManager(new LinearLayoutManager(this));
 
 
+        mHome_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent homeactivity = new Intent(BenefListActivity.this, MainActivity.class);
+                startActivity(homeactivity);
+
+            }
+        });
 
 
     }
+
+
 
 
     @Override
@@ -128,15 +147,19 @@ public class BenefListActivity extends AppCompatActivity {
 
 
 
+
                 PayerViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @SuppressLint("ResourceAsColor")
                     @Override
                     public void onClick(View view) {
 
+
                             final String expensekey = getIntent().getStringExtra("expensekey");
 
                             FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-                            String uid = current_user.getUid();
+                            final String uid = current_user.getUid();
+
+
 
                             mExpensesDatabase = FirebaseDatabase.getInstance().getReference()
                                     .child("Expenses")
@@ -144,6 +167,8 @@ public class BenefListActivity extends AppCompatActivity {
                                     .child("expense")
                                     .child(expensekey)
                                     .child("debtor");
+
+
 
                             HashMap<String, Object> debtorsMap = new HashMap<>();
                             debtorsMap.put(user_id, "false");
@@ -165,9 +190,12 @@ public class BenefListActivity extends AppCompatActivity {
 
                             PayerViewHolder.mView.setBackgroundColor(Color.rgb(255,201,71));
 
+
+
                     }
 
                 });
+
 
                 PayerViewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -188,6 +216,8 @@ public class BenefListActivity extends AppCompatActivity {
 
         mPayerList.setAdapter(firebaseRecyclerAdapter);
     }
+
+
 
 
     public static class PayerViewHolder extends RecyclerView.ViewHolder{
@@ -224,5 +254,74 @@ public class BenefListActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setTitle("Powrót")
+                .setIcon(R.drawable.ic_warning_purple_48dp)
+                .setMessage("Czy na pewno chcesz wrócić? Zmiany nie zostaną zapisane.")
+                .setNegativeButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        final String expensename = getIntent().getStringExtra("expensename");
+                        final String expensekey = getIntent().getStringExtra("expensekey");
+                        final String uid = getIntent().getStringExtra("userid");
+                        final String amount = getIntent().getStringExtra("amount");
+
+                        mExpensesDatabaseExName = FirebaseDatabase.getInstance().getReference()
+                                .child("Expenses")
+                                .child(uid)
+                                .child("expense")
+                                .child(expensekey)
+                                .child(amount);
+
+
+                        mExpensesDatabaseExName.getParent().removeValue();
+
+
+                        Intent gohome = new Intent(BenefListActivity.this, MainActivity.class);
+                        startActivity(gohome);
+
+                    }
+                }).setPositiveButton("Nie", null).show();
+    }
+
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                new AlertDialog.Builder(this).setTitle("Powrót")
+                        .setIcon(R.drawable.ic_warning_purple_48dp)
+                        .setMessage("Czy na pewno chcesz wrócić? Zmiany nie zostaną zapisane.")
+                        .setNegativeButton("Tak", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //finish();
+
+                                mExpensesDatabaseExName = FirebaseDatabase.getInstance().getReference()
+                                        .child("Expenses")
+                                        .child(uid)
+                                        .child("expense")
+                                        .child(expensekey)
+                                        .child("expensename");
+
+                                mExpensesDatabaseExName.getParent().removeValue();
+
+                                Intent gohome = new Intent(BenefListActivity.this, MainActivity.class);
+                                startActivity(gohome);
+
+                            }
+                        }).setPositiveButton("Nie", null).show();
+
+
+
+                break;
+        }
+        return true;
+    }
+    */
+
 
 }

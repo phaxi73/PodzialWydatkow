@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void sendToStart() {   //Metoda przenosząca do startActivity
+    //Metoda przenosząca do startActivity
+    private void sendToStart() {
         Intent startIntent = new Intent(MainActivity.this, StartActivity.class);
         startActivity(startIntent);
         finish();
@@ -98,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+
+
         if(item.getItemId() == R.id.main_setting_btn){
 
             Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -125,4 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).setPositiveButton("Nie", null).show();
     }
+
+
+
 }

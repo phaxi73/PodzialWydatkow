@@ -43,6 +43,7 @@
     <string name="welcometext">Witaj w aplikacji  Podział Wydatków!</string>
     <string name="dalej">Dalej</string>
     <string name="user_email">User Email</string>
+    <string name="zako_cz_dodawanie">Zakończ Dodawanie</string>
 
 
 </resources>
