@@ -84,7 +84,7 @@ public class FriendsFragment extends Fragment {
                 //friendsViewHolder.setEmail(friends.getEmail());
 
 
-                final String list_user_id = getRef(position).getKey();              //id konkretnego useraz listy
+                final String list_user_id = getRef(position).getKey();              //id konkretnego usera z listy
 
 
                 mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {     //ustawianie wartości dla konkretnego id usera na liście

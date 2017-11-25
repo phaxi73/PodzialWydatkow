@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bartek.podzialwydatkow.ExpenseDetailsActivity"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    tools:context="com.example.bartek.podzialwydatkow.ExpenseDetailsActivity">
 
     <include
         android:id="@+id/expensecreator_toolbar"
@@ -91,6 +91,31 @@
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/debtors_list"
+        android:layout_width="382dp"
+        android:layout_height="280dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/expense_details_delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/expense_details_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/usu_wydatek"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="@color/colorAccent"/>
 
 
 </android.support.constraint.ConstraintLayout>

@@ -11,18 +11,26 @@ public class Friends {
     public String thumb_image;
     public String user_id;
     public String expensekey;
+    public String amount;
+
+
+
+    //public Integer intdebtorscounter;
+
+
 
     public Friends(){
 
     }
 
-    public Friends(String name, String email, String user_id, String expensekey) {  //Konstruktory
+    public Friends(String name, String email, String user_id, String expensekey /*Integer intdebtorscounter*/) {  //Konstruktory
 
         this.name = name;
         this.email = email;
         this.thumb_image = thumb_image;
         this.user_id = user_id;
         this.expensekey = expensekey;
+        //this.intdebtorscounter = intdebtorscounter;
 
     }
 
@@ -61,5 +69,14 @@ public class Friends {
 
     public String getExpensekey() {return expensekey;}
     public void setExpensekey(String expensekey) {this.expensekey = expensekey;}
+
+
+
+
+
+
+
+   // public Integer getIntdebtorscounter() {return intdebtorscounter;}
+   // public void setIntdebtorscounter(Integer intdebtorscounter) {this.intdebtorscounter = intdebtorscounter;}
 
 }

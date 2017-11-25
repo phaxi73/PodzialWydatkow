@@ -58,7 +58,6 @@ public class BenefListActivity extends AppCompatActivity {
 
 
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +83,7 @@ public class BenefListActivity extends AppCompatActivity {
         mPayerList = findViewById(R.id.payer_list);
         mPayerList.setHasFixedSize(true);
         mPayerList.setLayoutManager(new LinearLayoutManager(this));
+
 
 
         mHome_btn.setOnClickListener(new View.OnClickListener() {
@@ -197,8 +197,11 @@ public class BenefListActivity extends AppCompatActivity {
 
                                     long debtorscounter = dataSnapshot.getChildrenCount();
                                     int intdebtorscounter = new BigDecimal(debtorscounter).intValueExact();    //Ilość korzystyjących (int)
+                                    intdebtorscounter = intdebtorscounter + 1;
 
 
+                                    Intent counterpass = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
+                                    counterpass.putExtra("debotrscounter", intdebtorscounter);
 
                                 }
 
@@ -226,6 +229,10 @@ public class BenefListActivity extends AppCompatActivity {
 
                             HashMap<String, Object> debtorsMap = new HashMap<>();
                             debtorsMap.put(user_id, intamount);
+
+                        Intent expensedetails = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
+                        expensedetails.putExtra("user_id", user_id);
+                        expensedetails.putExtra("amount", amount);
 
 
                             mExpensesDatabase.updateChildren(debtorsMap).addOnCompleteListener(new OnCompleteListener<Void>() {
