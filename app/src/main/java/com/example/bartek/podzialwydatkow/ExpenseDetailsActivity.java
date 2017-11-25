@@ -48,6 +48,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mExpensesDebtorDatabase;
+    private DatabaseReference mExpensesDatabaseExDelete;
 
     private FirebaseAuth mAuth;
 
@@ -91,6 +92,8 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
 
 
 
+
+
         mExpensesDatabase.child(mCurrent_user_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -131,6 +134,22 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
             }
         });
 
+        //USUWANIE WYDATKU PRZYCISK
+        mDeleteExpenseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mExpensesDatabaseExDelete = FirebaseDatabase.getInstance().getReference()
+                        .child("Expenses")
+                        .child(mCurrent_user_id)
+                        .child("expense")
+                        .child(expensekey);
+
+                mExpensesDatabaseExDelete.removeValue();
+                finish();
+
+            }
+        });
 
 
     }
@@ -141,6 +160,8 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
 
 
         final String expensekey = getIntent().getStringExtra("expensekey");
+
+        // POBIERA Z EXPENSES FRAGMENT I ZAMIAST USER_ID TO EXPENSEKEY, POWINNO BRAC USER_ID Z BenefList
         final String user_id = getIntent().getStringExtra("user_id");
 
         mExpensesDebtorDatabase = FirebaseDatabase.getInstance().getReference().child(mCurrent_user_id).child(expensekey).child("debtor").child(user_id);
@@ -213,6 +234,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
         };
 
         mDebtorsList.setAdapter(firebaseRecyclerAdapter);
+
 
 
     }

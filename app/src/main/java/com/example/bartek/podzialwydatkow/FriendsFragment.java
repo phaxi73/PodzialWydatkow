@@ -3,6 +3,7 @@ package com.example.bartek.podzialwydatkow;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -95,9 +96,11 @@ public class FriendsFragment extends Fragment {
                         String setUserImage = dataSnapshot.child("thumb_image").getValue().toString();
                         String userEmail = dataSnapshot.child("email").getValue().toString();
 
+
                         friendsViewHolder.setName(userName);
                         friendsViewHolder.setUserImage(setUserImage, getContext());
                         friendsViewHolder.setEmail(userEmail);
+
 
                     }
 

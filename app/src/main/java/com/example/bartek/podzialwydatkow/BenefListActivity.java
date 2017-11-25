@@ -179,7 +179,6 @@ public class BenefListActivity extends AppCompatActivity {
 
 
                 PayerViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @SuppressLint("ResourceAsColor")
                     @Override
                     public void onClick(View view) {
 
@@ -230,10 +229,6 @@ public class BenefListActivity extends AppCompatActivity {
                             HashMap<String, Object> debtorsMap = new HashMap<>();
                             debtorsMap.put(user_id, intamount);
 
-                        Intent expensedetails = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
-                        expensedetails.putExtra("user_id", user_id);
-                        expensedetails.putExtra("amount", amount);
-
 
                             mExpensesDatabase.updateChildren(debtorsMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -250,6 +245,11 @@ public class BenefListActivity extends AppCompatActivity {
                             });
 
                             PayerViewHolder.mView.setBackgroundColor(Color.rgb(255,201,71));
+
+                        Intent expensedetails = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
+                        expensedetails.putExtra("user_id", user_id);
+                        expensedetails.putExtra("amount", amount);
+
 
 
                             mExpensesDatabaseUserId = FirebaseDatabase.getInstance().getReference()
