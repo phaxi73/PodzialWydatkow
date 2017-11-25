@@ -151,7 +151,7 @@ public class BenefListActivity extends AppCompatActivity {
                 PayerViewHolder.setUserImage(friends.getThumb_image(), getApplicationContext());
 
                 final String user_id = getRef(position).getKey();
-                final String name = getRef(position).getKey();
+                //final String name = getRef(position).getKey();
 
 
                 mUsersDatabase.child(user_id).addValueEventListener(new ValueEventListener() {       //ustawianie wartości dla konkretnego id usera na liście
@@ -249,6 +249,8 @@ public class BenefListActivity extends AppCompatActivity {
                         Intent expensedetails = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
                         expensedetails.putExtra("user_id", user_id);
                         expensedetails.putExtra("amount", amount);
+                        expensedetails.putExtra("expensekey", expensekey);
+
 
 
 

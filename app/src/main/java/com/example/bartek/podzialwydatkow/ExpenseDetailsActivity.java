@@ -39,6 +39,8 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
     private TextView mCreatorAmount;
     private TextView mCreatorPayer;
 
+
+
     private Button mDeleteExpenseBtn;
 
     private RecyclerView mDebtorsList;
@@ -65,7 +67,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final String expensekey = getIntent().getStringExtra("expensekey");
-        final String user_id = getIntent().getStringExtra("user_id");
+        //final String user_id = getIntent().getStringExtra("user_id");
 
 
 
@@ -93,7 +95,6 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
 
 
 
-
         mExpensesDatabase.child(mCurrent_user_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -117,9 +118,11 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
 
 
 
+
                     mCreatorExpenseName.setText(expense_name);
                     mCreatorAmount.setText(amount + " zł");
                     mCreatorPayer.setText(payer);
+
 
 
                 }
@@ -158,11 +161,13 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
         final String expensekey = getIntent().getStringExtra("expensekey");
+
 
         // POBIERA Z EXPENSES FRAGMENT I ZAMIAST USER_ID TO EXPENSEKEY, POWINNO BRAC USER_ID Z BenefList
         final String user_id = getIntent().getStringExtra("user_id");
+
+
 
         mExpensesDebtorDatabase = FirebaseDatabase.getInstance().getReference().child(mCurrent_user_id).child(expensekey).child("debtor").child(user_id);
 
@@ -185,7 +190,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
                 DebtorsViewHolder.setUserImage(friends.getThumb_image(), getApplicationContext());
 
                 final String user_id = getRef(position).getKey();
-                final String name = getRef(position).getKey();
+                //final String name = getRef(position).getKey();
 
 
                 mUsersDatabase.child(user_id).addValueEventListener(new ValueEventListener() {       //ustawianie wartości dla konkretnego id usera na liście
@@ -215,11 +220,6 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        final String expensekey = getIntent().getStringExtra("expensekey");
-                        final String amount = getIntent().getStringExtra("amount");
-
-                        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-                        final String uid = current_user.getUid();
 
                         Toast.makeText(ExpenseDetailsActivity.this, "Tap", Toast.LENGTH_SHORT).show();
 
