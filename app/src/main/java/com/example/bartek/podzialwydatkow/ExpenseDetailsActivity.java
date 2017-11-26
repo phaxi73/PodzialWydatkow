@@ -162,11 +162,11 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
         super.onStart();
 
         final String expensekey = getIntent().getStringExtra("expensekey");
+        final String amount = getIntent().getStringExtra("amount");
 
 
         // POBIERA Z EXPENSES FRAGMENT I ZAMIAST USER_ID TO EXPENSEKEY, POWINNO BRAC USER_ID Z BenefList
         final String user_id = getIntent().getStringExtra("user_id");
-
 
 
         mExpensesDebtorDatabase = FirebaseDatabase.getInstance().getReference().child(mCurrent_user_id).child(expensekey).child("debtor").child(user_id);

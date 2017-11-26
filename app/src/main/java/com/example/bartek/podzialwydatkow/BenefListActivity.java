@@ -49,8 +49,6 @@ public class BenefListActivity extends AppCompatActivity {
     private DatabaseReference mFriendsDatabase;
     private DatabaseReference mExpensesDatabase;
     private DatabaseReference mExpensesDatabaseExName;
-    private DatabaseReference mExpensesDatabaseCheck;
-    private DatabaseReference mExpensesDatabaseUserId;
     private FirebaseAuth mAuth;
 
     private String mCurrent_user_id;
@@ -196,11 +194,14 @@ public class BenefListActivity extends AppCompatActivity {
 
                                     long debtorscounter = dataSnapshot.getChildrenCount();
                                     int intdebtorscounter = new BigDecimal(debtorscounter).intValueExact();    //Ilość korzystyjących (int)
-                                    intdebtorscounter = intdebtorscounter + 1;
+
+
+                                    //float floatdebtorscounter = (float) debtorscounter;
+                                    //floatdebtorscounter = floatdebtorscounter + 1;
 
 
                                     Intent counterpass = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
-                                    counterpass.putExtra("debotrscounter", intdebtorscounter);
+                                    counterpass.putExtra("floatdebotrscounter", intdebtorscounter);
 
                                 }
 
@@ -215,6 +216,7 @@ public class BenefListActivity extends AppCompatActivity {
 
 
                             int intamount = Integer.parseInt(amount);
+                            float floatamount = (float) intamount;
 
 
                             mExpensesDatabase = FirebaseDatabase.getInstance().getReference()
@@ -227,7 +229,7 @@ public class BenefListActivity extends AppCompatActivity {
 
 
                             HashMap<String, Object> debtorsMap = new HashMap<>();
-                            debtorsMap.put(user_id, intamount);
+                            debtorsMap.put(user_id, floatamount);
 
 
                             mExpensesDatabase.updateChildren(debtorsMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -250,17 +252,6 @@ public class BenefListActivity extends AppCompatActivity {
                         expensedetails.putExtra("user_id", user_id);
                         expensedetails.putExtra("amount", amount);
                         expensedetails.putExtra("expensekey", expensekey);
-
-
-
-
-                            mExpensesDatabaseUserId = FirebaseDatabase.getInstance().getReference()
-                                .child("Expenses")
-                                .child(uid)
-                                .child("expense")
-                                .child(expensekey)
-                                .child("debtor")
-                                .child(user_id);
 
 
 
@@ -336,7 +327,6 @@ public class BenefListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        final String expensename = getIntent().getStringExtra("expensename");
                         final String expensekey = getIntent().getStringExtra("expensekey");
                         final String uid = getIntent().getStringExtra("userid");
                         final String amount = getIntent().getStringExtra("amount");
@@ -359,41 +349,6 @@ public class BenefListActivity extends AppCompatActivity {
                 }).setPositiveButton("Nie", null).show();
     }
 
-    /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                new AlertDialog.Builder(this).setTitle("Powrót")
-                        .setIcon(R.drawable.ic_warning_purple_48dp)
-                        .setMessage("Czy na pewno chcesz wrócić? Zmiany nie zostaną zapisane.")
-                        .setNegativeButton("Tak", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //finish();
-
-                                mExpensesDatabaseExName = FirebaseDatabase.getInstance().getReference()
-                                        .child("Expenses")
-                                        .child(uid)
-                                        .child("expense")
-                                        .child(expensekey)
-                                        .child("expensename");
-
-                                mExpensesDatabaseExName.getParent().removeValue();
-
-                                Intent gohome = new Intent(BenefListActivity.this, MainActivity.class);
-                                startActivity(gohome);
-
-                            }
-                        }).setPositiveButton("Nie", null).show();
-
-
-
-                break;
-        }
-        return true;
-    }
-    */
 
 
 }
