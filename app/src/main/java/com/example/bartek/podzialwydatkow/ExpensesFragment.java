@@ -95,7 +95,7 @@ public class ExpensesFragment extends Fragment {
                     public void onClick(View view) {
 
                         Intent expensedetails_intent = new Intent(getActivity(), ExpenseDetailsActivity.class);
-                        expensedetails_intent.putExtra("expensemame", expensename);
+                        //expensedetails_intent.putExtra("expensemame", expensename);
                         expensedetails_intent.putExtra("expensekey", expensekey);
                         expensedetails_intent.putExtra("user_id", user_id);
                         startActivity(expensedetails_intent);

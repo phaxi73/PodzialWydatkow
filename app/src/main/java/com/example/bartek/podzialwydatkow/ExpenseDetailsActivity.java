@@ -168,15 +168,21 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
         // POBIERA Z EXPENSES FRAGMENT I ZAMIAST USER_ID TO EXPENSEKEY, POWINNO BRAC USER_ID Z BenefList
         final String user_id = getIntent().getStringExtra("user_id");
 
+        mExpensesDebtorDatabase = FirebaseDatabase.getInstance().getReference()
+                .child("Expenses")
+                .child(mCurrent_user_id)
+                .child("expense")
+                .child(expensekey)
+                .child("debtor")
+                .child(user_id);
 
-        mExpensesDebtorDatabase = FirebaseDatabase.getInstance().getReference().child(mCurrent_user_id).child(expensekey).child("debtor").child(user_id);
 
         FirebaseRecyclerAdapter<Friends, BenefListActivity.PayerViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, BenefListActivity.PayerViewHolder>
 
                 (Friends.class,
-                        R.layout.users_single_layout,
-                        BenefListActivity.PayerViewHolder.class,
-                        mExpensesDebtorDatabase
+                 R.layout.users_single_layout,
+                 BenefListActivity.PayerViewHolder.class,
+                 mExpensesDebtorDatabase
                 )
 
 
@@ -189,8 +195,8 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
                 DebtorsViewHolder.setEmail(friends.getEmail());
                 DebtorsViewHolder.setUserImage(friends.getThumb_image(), getApplicationContext());
 
+
                 final String user_id = getRef(position).getKey();
-                //final String name = getRef(position).getKey();
 
 
                 mUsersDatabase.child(user_id).addValueEventListener(new ValueEventListener() {       //ustawianie wartości dla konkretnego id usera na liście
@@ -214,6 +220,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
                         //Error
                     }
                 });
+
 
 
                 DebtorsViewHolder.mView.setOnClickListener(new View.OnClickListener() {

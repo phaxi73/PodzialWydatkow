@@ -71,6 +71,13 @@ public class Friends {
     public void setExpensekey(String expensekey) {this.expensekey = expensekey;}
 
 
+    public String getAmount() {
+        return amount;
+    }
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
 
 
 

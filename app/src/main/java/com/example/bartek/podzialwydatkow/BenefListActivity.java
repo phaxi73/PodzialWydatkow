@@ -111,6 +111,8 @@ public class BenefListActivity extends AppCompatActivity {
                     Intent homeactivity = new Intent(BenefListActivity.this, MainActivity.class);
                     startActivity(homeactivity);
 
+
+
                     //JESLI NIE, TOAST, ŻE TRZEBA DODAC KORZYSTAJACYCH
 
                 //}
@@ -200,8 +202,9 @@ public class BenefListActivity extends AppCompatActivity {
                                     //floatdebtorscounter = floatdebtorscounter + 1;
 
 
-                                    Intent counterpass = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
-                                    counterpass.putExtra("floatdebotrscounter", intdebtorscounter);
+                                   Intent counterpass = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
+                                   counterpass.putExtra("intdebotrscounter", intdebtorscounter);
+                                   ///////// NIE PRZEKAZUJE BO NIE MA STARTU
 
                                 }
 
@@ -252,6 +255,7 @@ public class BenefListActivity extends AppCompatActivity {
                         expensedetails.putExtra("user_id", user_id);
                         expensedetails.putExtra("amount", amount);
                         expensedetails.putExtra("expensekey", expensekey);
+                        startActivity(expensedetails);
 
 
 

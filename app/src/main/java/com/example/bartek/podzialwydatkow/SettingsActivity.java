@@ -96,9 +96,8 @@ public class SettingsActivity extends AppCompatActivity {
 
                 mName.setText(name);
 
-                if(!image.equals("default")){ //Ladowanie obrazue (żeli użytkownik nie dodał swojego obrazu, wyświetl obraz domyślny)
+                if(!image.equals("default")){ //Ladowanie obrazue (jeżeli użytkownik nie dodał swojego obrazu, wyświetl obraz domyślny)
 
-                    //Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.account_icon_orange).into(mDisplayImage);
 
                     //Pozwala na ładowanie obrazów offline
                     Picasso.with(SettingsActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.account_icon_orange).into(mDisplayImage, new Callback() {
