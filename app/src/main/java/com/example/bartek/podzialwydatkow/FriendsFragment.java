@@ -80,9 +80,9 @@ public class FriendsFragment extends Fragment {
             @Override
             protected void populateViewHolder(final FriendsViewHolder friendsViewHolder, final Friends friends, int position) {
 
-                //friendsViewHolder.setName(friends.getName());
-                //friendsViewHolder.setUserImage(friends.getThumb_image(), getContext());
-                //friendsViewHolder.setEmail(friends.getEmail());
+                friendsViewHolder.setName(friends.getName());
+                friendsViewHolder.setUserImage(friends.getThumb_image(), getContext());
+                friendsViewHolder.setEmail(friends.getEmail());
 
 
                 final String list_user_id = getRef(position).getKey();              //id konkretnego usera z listy

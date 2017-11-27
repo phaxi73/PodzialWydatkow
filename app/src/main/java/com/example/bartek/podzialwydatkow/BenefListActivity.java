@@ -198,9 +198,6 @@ public class BenefListActivity extends AppCompatActivity {
                                     int intdebtorscounter = new BigDecimal(debtorscounter).intValueExact();    //Ilość korzystyjących (int)
 
 
-                                    //float floatdebtorscounter = (float) debtorscounter;
-                                    //floatdebtorscounter = floatdebtorscounter + 1;
-
 
                                    Intent counterpass = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
                                    counterpass.putExtra("intdebotrscounter", intdebtorscounter);
@@ -218,8 +215,7 @@ public class BenefListActivity extends AppCompatActivity {
                         }
 
 
-                            int intamount = Integer.parseInt(amount);
-                            float floatamount = (float) intamount;
+                            float floatamount = Float.parseFloat(amount);
 
 
                             mExpensesDatabase = FirebaseDatabase.getInstance().getReference()
@@ -255,7 +251,7 @@ public class BenefListActivity extends AppCompatActivity {
                         expensedetails.putExtra("user_id", user_id);
                         expensedetails.putExtra("amount", amount);
                         expensedetails.putExtra("expensekey", expensekey);
-                        startActivity(expensedetails);
+                        //startActivity(expensedetails);
 
 
 
