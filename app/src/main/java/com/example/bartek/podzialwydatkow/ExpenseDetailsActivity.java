@@ -192,7 +192,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
                 final String user_id = getRef(position).getKey();
 
 
-                mExpensesDatabase.child(user_id).addValueEventListener(new ValueEventListener() {       //ustawianie wartości dla konkretnego id usera na liście
+                mUsersDatabase.child(user_id).addValueEventListener(new ValueEventListener() {       //ustawianie wartości dla konkretnego id usera na liście
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
