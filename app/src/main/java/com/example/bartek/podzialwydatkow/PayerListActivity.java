@@ -1,9 +1,9 @@
 package com.example.bartek.podzialwydatkow;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -18,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PayerListActivity extends AppCompatActivity {
@@ -27,12 +29,12 @@ public class PayerListActivity extends AppCompatActivity {
     private RecyclerView mPayerList;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mUserIdDatabase;
-
     private DatabaseReference mFriendsDatabase;
     private FirebaseAuth mAuth;
 
     private String mCurrent_user_id;
 
+    private HashMap<Friends, Boolean> mapOfSelectedUsers = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,6 @@ public class PayerListActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -87,18 +88,30 @@ public class PayerListActivity extends AppCompatActivity {
                 final String user_id = getRef(position).getKey();
                 final String name = getRef(position).getKey();
 
+                // Obiekt friend do przechowania w liście
+                final Friends friend = new Friends();
 
                 mUsersDatabase.child(user_id).addValueEventListener(new ValueEventListener() {       //ustawianie wartości dla konkretnego id usera na liście
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        friend.user_id = user_id;
 
+                        // Nazwa usera
                         String userName = dataSnapshot.child("name").getValue().toString();
-                        String setUserImage = dataSnapshot.child("thumb_image").getValue().toString();
-                        String userEmail = dataSnapshot.child("email").getValue().toString();
-
                         PayerViewHolder.setName(userName);                                           //Wyświetlanie
-                        PayerViewHolder.setUserImage(setUserImage, getApplicationContext());         //na liście
-                        PayerViewHolder.setEmail(userEmail);                                         //wyboru płacącego
+                        friend.name = userName;
+
+                        // Obrazek usera
+                        String setUserImage = dataSnapshot.child("thumb_image").getValue().toString();
+                        PayerViewHolder.setUserImage(setUserImage, getApplicationContext());
+                        friend.setThumb_image(setUserImage);//na liście
+
+                        // Email usera
+                        String userEmail = dataSnapshot.child("email").getValue().toString();
+                        PayerViewHolder.setEmail(userEmail);                            //wyboru płacącego
+                        friend.email = userEmail;
+
+                        mapOfSelectedUsers.put(friend, false);
 
                     }
 
@@ -114,21 +127,28 @@ public class PayerListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        Intent expense_adder = new Intent (PayerListActivity.this, ExpenseAdderActivity.class);
-                        expense_adder.putExtra("user_id", user_id);
-                        expense_adder.putExtra("name", name);
-                        startActivity(expense_adder);
+                        // Usuwanie wybranegu usera
+                        if (mapOfSelectedUsers.get(friend)) {
+                            // Odznaczenie w mapie
+                            mapOfSelectedUsers.put(friend, false);
+                            // Usunięcie kolorowania
+                            view.setBackgroundColor(0x00000000);
 
-
+                        }
+                        // Oznaczanie usera jako wybranego
+                        else {
+                            // Oznaczenie w mapie jako wybranego
+                            mapOfSelectedUsers.put(friend, true);
+                            // Kolorowanie wybranego
+                            view.setBackgroundColor(Color.parseColor("#00FF00"));
+                        }
                     }
                 });
-
             }
         };
 
         mPayerList.setAdapter(firebaseRecyclerAdapter);
     }
-
 
     public static class PayerViewHolder extends RecyclerView.ViewHolder{
 
@@ -138,6 +158,13 @@ public class PayerListActivity extends AppCompatActivity {
             super(itemView);
 
             mView = itemView;
+
+            mView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return false;
+                }
+            });
 
         }
 
