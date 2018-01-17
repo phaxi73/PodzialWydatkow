@@ -3,11 +3,11 @@ package com.example.bartek.podzialwydatkow;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,8 +31,8 @@ import static android.view.View.VISIBLE;
 
 public class ExpenseAdderActivity extends AppCompatActivity {
 
+    HashMap<Friends, Boolean> selectedFriendsResultMap = new HashMap<>();
     private android.support.v7.widget.Toolbar mToolbar;
-
     private TextInputLayout mExpenseName;
     private TextInputLayout mAmount;
     private Button mWhopaidBtn;
@@ -41,14 +41,9 @@ public class ExpenseAdderActivity extends AppCompatActivity {
     private TextView mWhenPaidTxt;
     private TextView mPayerChosenTxt;
     private Button mIpaidBtn;
-
-
     private ProgressDialog mAddProgress;
-
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
-
-
     private DatabaseReference mExpensesDatabase;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mCurrentUserName;
@@ -125,7 +120,10 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
                 Intent payer = new Intent(ExpenseAdderActivity.this, PayerListActivity.class);
 
-                startActivity(payer);
+                // Startujemy aktywność nie normalnie, tylko z oczekiwaniem wyniku ~ Igor
+                startActivityForResult(payer, 1337);
+
+
 
             }
         });
@@ -202,8 +200,6 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
     }
 
-
-
     private void add_expense (final String expensename, final String amount, String user_name) {
 
 
@@ -255,7 +251,6 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                 }).setPositiveButton("Nie", null).show();
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -281,7 +276,23 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         return true;
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1337) {
+            if (resultCode == RESULT_OK) {
+                // Łapiemy wartość z zamkniętej aktywności
+                try {
+                    selectedFriendsResultMap = (HashMap<Friends, Boolean>) data.getExtras().getSerializable("selectedUsers");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
+                Toast.makeText(getApplicationContext(), "Wybranych: ", Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                // Opcja gdy użytkownik nic nie wybierze
+            }
+        }
+    }
 
 
 }

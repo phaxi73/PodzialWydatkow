@@ -1,12 +1,14 @@
 package com.example.bartek.podzialwydatkow;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -27,6 +29,7 @@ public class PayerListActivity extends AppCompatActivity {
     private android.support.v7.widget.Toolbar mToolbar;
 
     private RecyclerView mPayerList;
+    private Button confirmButton;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mUserIdDatabase;
     private DatabaseReference mFriendsDatabase;
@@ -60,6 +63,23 @@ public class PayerListActivity extends AppCompatActivity {
         mPayerList.setHasFixedSize(true);
         mPayerList.setLayoutManager(new LinearLayoutManager(this));
 
+
+        // Guzik potwierdzenia ~ Igor
+        confirmButton = findViewById(R.id.payer_confirm_btn);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+
+                if (mapOfSelectedUsers.values().contains(true)) {
+                    intent.putExtra("selectedUsers", mapOfSelectedUsers);
+                    setResult(RESULT_OK, intent);
+                } else {
+                    setResult(RESULT_CANCELED, intent);
+                }
+                finish();
+            }
+        });
 
 
 
@@ -174,7 +194,6 @@ public class PayerListActivity extends AppCompatActivity {
             userNameView.setText(email);
 
         }
-
 
         public void setName(String name){
 

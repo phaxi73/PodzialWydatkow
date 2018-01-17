@@ -4,7 +4,7 @@ package com.example.bartek.podzialwydatkow;
  * Created by Bartek on 16.11.2017.
  */
 
-public class Friends {
+public class Friends implements java.io.Serializable {
 
     public String name;
     public String email;
