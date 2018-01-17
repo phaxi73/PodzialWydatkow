@@ -1,7 +1,10 @@
 package com.example.bartek.podzialwydatkow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,13 +15,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -57,14 +66,12 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final String expensekey = getIntent().getStringExtra("expensekey");
+        //final String user_id = getIntent().getStringExtra("user_id");
 
 
 
-//        mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses");
-        //mFriendsDatabase = FirebaseDatabase.getInstance().getReference().child("Friends").child(mCurrent_user_id);
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
         mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses");
-
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
 
@@ -140,8 +147,6 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
                         .child(expensekey);
 
                 mExpensesDatabaseExDelete.removeValue();
-                Intent expenselist = new Intent(ExpenseDetailsActivity.this, MainActivity.class);
-                startActivity(expenselist);
                 finish();
 
             }
@@ -152,10 +157,11 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-            super.onStart();
+        super.onStart();
 
         final String expensekey = getIntent().getStringExtra("expensekey");
         final String amount = getIntent().getStringExtra("amount");
+
 
         // POBIERA Z EXPENSES FRAGMENT I ZAMIAST USER_ID TO EXPENSEKEY, POWINNO BRAC USER_ID Z BenefList
         final String user_id = getIntent().getStringExtra("user_id");
@@ -169,24 +175,23 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
                 .child(user_id);
 
 
+        FirebaseRecyclerAdapter<Friends, BenefListActivity.PayerViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Friends, BenefListActivity.PayerViewHolder>
 
-        FirebaseRecyclerAdapter<Users, ExpenseDetailsActivity.DebtorsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Users, DebtorsViewHolder>
-
-                (Users.class,
+                (Friends.class,
                  R.layout.users_single_layout,
-                 DebtorsViewHolder.class,
-                 mExpensesDatabase
+                 BenefListActivity.PayerViewHolder.class,
+                 mExpensesDebtorDatabase
                 )
 
 
         {
 
             @Override
-            protected void populateViewHolder(final DebtorsViewHolder DebtorsViewHolder,final Users users, int position) {
+            protected void populateViewHolder(final BenefListActivity.PayerViewHolder DebtorsViewHolder, final Friends friends, int position) {
 
-                DebtorsViewHolder.setName(users.getName_user());
-                DebtorsViewHolder.setEmail(users.getEmail_user());
-                DebtorsViewHolder.setUserImage(users.getThumb_image_user(), getApplicationContext());
+                DebtorsViewHolder.setName(friends.getName());
+                DebtorsViewHolder.setEmail(friends.getEmail());
+                DebtorsViewHolder.setUserImage(friends.getThumb_image(), getApplicationContext());
 
 
                 final String user_id = getRef(position).getKey();

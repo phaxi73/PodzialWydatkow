@@ -88,6 +88,8 @@ public class BenefListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                //NIEWAZNY FRAGMENT, MOZE DODAC KIEDYS OPCJONALNIE
+
                 /*
                 final String expensename = getIntent().getStringExtra("expensename");
                 final String expensekey = getIntent().getStringExtra("expensekey");
@@ -198,6 +200,9 @@ public class BenefListActivity extends AppCompatActivity {
                                     int intdebtorscounter = new BigDecimal(debtorscounter).intValueExact();    //Ilość korzystyjących (int)
 
 
+                                    //float floatdebtorscounter = (float) debtorscounter;
+                                    //floatdebtorscounter = floatdebtorscounter + 1;
+
 
                                    Intent counterpass = new Intent(BenefListActivity.this, ExpenseDetailsActivity.class);
                                    counterpass.putExtra("intdebotrscounter", intdebtorscounter);
@@ -215,7 +220,8 @@ public class BenefListActivity extends AppCompatActivity {
                         }
 
 
-                            float floatamount = Float.parseFloat(amount);
+                            int intamount = Integer.parseInt(amount);
+                            float floatamount = (float) intamount;
 
 
                             mExpensesDatabase = FirebaseDatabase.getInstance().getReference()
@@ -251,7 +257,7 @@ public class BenefListActivity extends AppCompatActivity {
                         expensedetails.putExtra("user_id", user_id);
                         expensedetails.putExtra("amount", amount);
                         expensedetails.putExtra("expensekey", expensekey);
-                        //startActivity(expensedetails);
+                        startActivity(expensedetails);
 
 
 
