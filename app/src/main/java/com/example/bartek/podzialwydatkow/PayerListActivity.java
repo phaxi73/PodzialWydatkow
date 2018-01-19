@@ -20,7 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -71,12 +73,28 @@ public class PayerListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent();
 
+                // Przenosimy wszystkich zaznaczonych użytkowników do osobnej listy
                 if (mapOfSelectedUsers.values().contains(true)) {
-                    intent.putExtra("selectedUsers", mapOfSelectedUsers);
+
+                    // Lista wszystkich wybranych znajomych
+                    ArrayList<Friends> listOfSelectedFriends = new ArrayList<>();
+
+                    // Iterujemy po mapie
+                    for (Map.Entry<Friends, Boolean> user : mapOfSelectedUsers.entrySet()) {
+                        // Dodajemy jezeli jest zaznaczony
+                        if (user.getValue()) {
+                            listOfSelectedFriends.add(user.getKey());
+                        }
+
+                    }
+                    // Result jeżeli coś zostało wybrane
+                    intent.putExtra("selectedUsers", listOfSelectedFriends);
                     setResult(RESULT_OK, intent);
                 } else {
+                    // Result jeżeli użytkownik nic nie wybrał
                     setResult(RESULT_CANCELED, intent);
                 }
+                // Zamykamy aktywność
                 finish();
             }
         });

@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,13 +27,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import static android.view.View.VISIBLE;
 
 public class ExpenseAdderActivity extends AppCompatActivity {
 
-    HashMap<Friends, Boolean> selectedFriendsResultMap = new HashMap<>();
+    // LOCAL DATA
+    private ArrayList<Friends> listOfSelectedFriends = new ArrayList<>();
+    private Double price = 0.0;
+    private String user_id;
+    private Friends currentUser = null;
+
+    // UI
     private android.support.v7.widget.Toolbar mToolbar;
     private TextInputLayout mExpenseName;
     private TextInputLayout mAmount;
@@ -42,6 +49,9 @@ public class ExpenseAdderActivity extends AppCompatActivity {
     private TextView mPayerChosenTxt;
     private Button mIpaidBtn;
     private ProgressDialog mAddProgress;
+    private RecyclerView recyclerView;
+
+    //DATABASE
     private FirebaseAuth mAuth;
     private FirebaseUser mCurrentUser;
     private DatabaseReference mExpensesDatabase;
@@ -54,150 +64,11 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_adder);
 
-        mToolbar = findViewById(R.id.newexpense_toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Nowy wydatek");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        user_id = getIntent().getStringExtra("user_id");
 
-        final String name = getIntent().getStringExtra("name");
-        final String user_id = getIntent().getStringExtra("user_id");
-
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
-        mAuth = FirebaseAuth.getInstance();
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        mCurrentUserName = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid()).child("name");
-
-        mAddProgress = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
-
-        mExpenseName = findViewById(R.id.adder_expense_name);
-        mAmount = findViewById(R.id.adder_expense_amount);
-        mPayerBtn = findViewById(R.id.adder_payer_btn);
-
-        mPayerTxt = findViewById(R.id.adder_payer_text);
-        mWhenPaidTxt = findViewById(R.id.adder_whenpaid_txt);
-        mPayerTxt.setVisibility(View.INVISIBLE);
-        mWhenPaidTxt.setVisibility(View.INVISIBLE);
-        mPayerChosenTxt = findViewById(R.id.adder_whenpaid_txt);
-
-        mWhopaidBtn = findViewById(R.id.adder_expense_btn);
-        mIpaidBtn = findViewById(R.id.adder_payer_me);
-
-        mWhopaidBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String expense_name = mExpenseName.getEditText().getText().toString();
-                String amount = mAmount.getEditText().getText().toString();
-                String user_name = mPayerTxt.getText().toString();
-
-
-                if(!TextUtils.isEmpty(expense_name) &&
-                  (!TextUtils.isEmpty(amount) &&
-                  (mPayerChosenTxt.getVisibility() == View.VISIBLE))){
-
-                   // mAddProgress.setTitle("Dodawanie wydatku");
-                    //mAddProgress.setMessage("Proszę czekać...");
-                    //mAddProgress.setCanceledOnTouchOutside(false);
-                    //mAddProgress.show();
-                    add_expense(expense_name, amount, user_name);
-
-
-                } else {
-
-                    Toast.makeText(ExpenseAdderActivity.this, "Uzupełnij puste pola!", Toast.LENGTH_SHORT).show();
-
-                }
-
-            }
-        });
-
-
-
-        // --- WYBIERANIE PLACACEGO Z LISTY ZNAJOMYCH ---
-        mPayerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent payer = new Intent(ExpenseAdderActivity.this, PayerListActivity.class);
-
-                // Startujemy aktywność nie normalnie, tylko z oczekiwaniem wyniku ~ Igor
-                startActivityForResult(payer, 1337);
-
-
-
-            }
-        });
-
-
-        // --- WYBIERANIE ZALOGOWANEWGO UZYTKOWNIKA JAKO PLACACEGO ---
-        mCurrentUserName.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                final String current_user_name = dataSnapshot.getValue().toString();
-
-
-                mIpaidBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        mPayerTxt.setText(current_user_name);
-
-                        mPayerTxt.setVisibility(VISIBLE);
-                        mWhenPaidTxt.setVisibility(VISIBLE);
-
-                    }
-                });
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                //Error
-
-            }
-        });
-
-
-        // --- KTO ZAPLACIL WYSWIETLANIE ---
-        if(user_id != null) {
-
-            mUsersDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    if(dataSnapshot.hasChild(user_id)){
-
-                    String user_name = dataSnapshot
-                            .child(user_id)
-                            .child("name").getValue().toString();
-
-                    mPayerTxt.setText(user_name);
-
-                    }
-
-                    if (!TextUtils.isEmpty(mPayerTxt.getText().toString())) {
-
-                        mPayerTxt.setVisibility(VISIBLE);
-                        mWhenPaidTxt.setVisibility(VISIBLE);
-
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                    //Error
-
-                }
-            });
-
-        }
-
-
-
+        InitFirebaseAndCurrentUser();
+        bindUI();
+        bindOnClickListeners();
     }
 
     private void add_expense (final String expensename, final String amount, String user_name) {
@@ -276,18 +147,144 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         return true;
     }
 
+    private void bindUI() {
+        // Toolbar
+        mToolbar = findViewById(R.id.newexpense_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Nowy wydatek");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Other
+        mAddProgress = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
+        mExpenseName = findViewById(R.id.adder_expense_name);
+        mAmount = findViewById(R.id.adder_expense_amount);
+        mPayerBtn = findViewById(R.id.adder_payer_btn);
+        mWhopaidBtn = findViewById(R.id.adder_expense_btn);
+        mIpaidBtn = findViewById(R.id.adder_payer_me);
+
+        // RecyclerView
+        recyclerView = findViewById(R.id.expense_adder_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+    }
+
+    private void InitFirebaseAndCurrentUser() {
+
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+        mAuth = FirebaseAuth.getInstance();
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        user_id = mCurrentUser.getUid();
+
+        mUsersDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild(user_id)) {
+
+                    String user_name = dataSnapshot
+                            .child(user_id)
+                            .child("name")
+                            .getValue()
+                            .toString();
+
+                    String user_email = dataSnapshot
+                            .child(user_id)
+                            .child("email")
+                            .getValue()
+                            .toString();
+
+                    String user_image = dataSnapshot
+                            .child(user_id)
+                            .child("image")
+                            .getValue()
+                            .toString();
+
+                    //FIXME: Nie mam pojęcia czym jest expensekey
+                    currentUser = new Friends(user_name, user_email, user_image, "");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                //Error
+
+            }
+        });
+
+    }
+
+    private void bindOnClickListeners() {
+
+        mWhopaidBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String expense_name = mExpenseName.getEditText().getText().toString();
+                String amount = mAmount.getEditText().getText().toString();
+                price = Double.valueOf(amount);
+                String user_name = mPayerTxt.getText().toString();
+
+
+                if (!TextUtils.isEmpty(expense_name) &&
+                        (!TextUtils.isEmpty(amount) &&
+                                (mPayerChosenTxt.getVisibility() == View.VISIBLE))) {
+
+                    // mAddProgress.setTitle("Dodawanie wydatku");
+                    //mAddProgress.setMessage("Proszę czekać...");
+                    //mAddProgress.setCanceledOnTouchOutside(false);
+                    //mAddProgress.show();
+                    add_expense(expense_name, amount, user_name);
+
+
+                } else {
+
+                    Toast.makeText(ExpenseAdderActivity.this, "Uzupełnij puste pola!", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
+
+        // --- WYBIERANIE PLACACEGO Z LISTY ZNAJOMYCH --- ~ Igor
+        mPayerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent payer = new Intent(ExpenseAdderActivity.this, PayerListActivity.class);
+
+                // Startujemy aktywność nie normalnie, tylko z oczekiwaniem wyniku ~ Igor
+                startActivityForResult(payer, 1337);
+            }
+        });
+
+        // ---JA PLACE--- ~ Igor
+        mIpaidBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listOfSelectedFriends.clear();
+                listOfSelectedFriends.add(currentUser);
+                price = Double.valueOf(mAmount.getEditText().getText().toString());
+                recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends, price));
+            }
+        });
+
+
+    }
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1337) {
             if (resultCode == RESULT_OK) {
                 // Łapiemy wartość z zamkniętej aktywności
-                try {
-                    selectedFriendsResultMap = (HashMap<Friends, Boolean>) data.getExtras().getSerializable("selectedUsers");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                listOfSelectedFriends = (ArrayList<Friends>) data.getExtras().getSerializable("selectedUsers");
+                // Łapiemy wartość zpola ceny
+                price = Double.valueOf(mAmount.getEditText().getText().toString());
+                recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends, price));
 
-                Toast.makeText(getApplicationContext(), "Wybranych: ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Wybranych: " + listOfSelectedFriends.size(), Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
                 // Opcja gdy użytkownik nic nie wybierze
             }
