@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ExpenseDetailsRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseDetailsRecyclerViewAdapter.ViewHolder> {
 
-    private ArrayList<Friends> listOfFriends;
+    public ArrayList<Friends> listOfFriends;
 
     public ExpenseDetailsRecyclerViewAdapter(ArrayList<Friends> listOfFriends) {
         this.listOfFriends = listOfFriends;
@@ -46,6 +49,7 @@ public class ExpenseDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Expe
             Picasso.with(holder.payerImage.getContext()).load(payer.thumb_image).into(holder.payerImage);
         }
 
+        holder.itemView.setOnClickListener(removeElement(payer));
         holder.itemView.setTag(payer);
     }
 
@@ -54,19 +58,41 @@ public class ExpenseDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Expe
         return listOfFriends.size();
     }
 
+    private View.OnClickListener removeElement(final Friends debtor) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+                DatabaseReference debtorDB = FirebaseDatabase.getInstance().getReference()
+                        .child("Expenses")
+                        .child(userID)
+                        .child("expense")
+                        .child(debtor.expensekey)
+                        .child("debtor")
+                        .child(debtor.user_id);
+
+                debtorDB.removeValue();
+
+                listOfFriends.remove(debtor);
+                notifyDataSetChanged();
+            }
+        };
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView payerImage;
         public TextView payerName;
         public TextView payerEmail;
         public TextView payerDebt;
-
         public ViewHolder(View itemView) {
             super(itemView);
             payerImage = itemView.findViewById(R.id.payer_single_image);
             payerName = itemView.findViewById(R.id.payer_single_name);
             payerEmail = itemView.findViewById(R.id.payer_single_email);
             payerDebt = itemView.findViewById(R.id.payer_single_debt);
-
         }
     }
 }

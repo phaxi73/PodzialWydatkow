@@ -2,7 +2,6 @@ package com.example.bartek.podzialwydatkow;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -178,7 +177,7 @@ public class PayerListActivity extends AppCompatActivity {
                             // Oznaczenie w mapie jako wybranego
                             mapOfSelectedUsers.put(friend, true);
                             // Kolorowanie wybranego
-                            view.setBackgroundColor(Color.parseColor("#00FF00"));
+                            view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                         }
                     }
                 });
