@@ -225,23 +225,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                 price = Double.valueOf(amount);
                 String user_name = mPayerTxt.getText().toString();
 
-
-                if (!TextUtils.isEmpty(expense_name) &&
-                        (!TextUtils.isEmpty(amount) &&
-                                (mPayerChosenTxt.getVisibility() == View.VISIBLE))) {
-
-                    // mAddProgress.setTitle("Dodawanie wydatku");
-                    //mAddProgress.setMessage("Proszę czekać...");
-                    //mAddProgress.setCanceledOnTouchOutside(false);
-                    //mAddProgress.show();
-                    add_expense(expense_name, amount, user_name);
-
-
-                } else {
-
-                    Toast.makeText(ExpenseAdderActivity.this, "Uzupełnij puste pola!", Toast.LENGTH_SHORT).show();
-
-                }
+                if (textFieldsValid()) add_expense(expense_name, amount, user_name);
 
             }
         });
@@ -252,10 +236,12 @@ public class ExpenseAdderActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent payer = new Intent(ExpenseAdderActivity.this, PayerListActivity.class);
+                if (textFieldsValid()) {
+                    Intent payer = new Intent(ExpenseAdderActivity.this, PayerListActivity.class);
 
-                // Startujemy aktywność nie normalnie, tylko z oczekiwaniem wyniku ~ Igor
-                startActivityForResult(payer, 1337);
+                    // Startujemy aktywność nie normalnie, tylko z oczekiwaniem wyniku ~ Igor
+                    startActivityForResult(payer, 1337);
+                }
             }
         });
 
@@ -263,16 +249,20 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         mIpaidBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listOfSelectedFriends.clear();
-                listOfSelectedFriends.add(currentUser);
-                price = Double.valueOf(mAmount.getEditText().getText().toString());
-                recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends, price));
+
+                if (textFieldsValid()) {
+
+                    listOfSelectedFriends.clear();
+                    listOfSelectedFriends.add(currentUser);
+                    price = Double.valueOf(mAmount.getEditText().getText().toString());
+                    recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends, price));
+
+                }
             }
         });
 
 
     }
-
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -282,12 +272,31 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                 listOfSelectedFriends = (ArrayList<Friends>) data.getExtras().getSerializable("selectedUsers");
                 // Łapiemy wartość zpola ceny
                 price = Double.valueOf(mAmount.getEditText().getText().toString());
-                recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends, price));
+                recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends, price / listOfSelectedFriends.size()));
 
                 Toast.makeText(getApplicationContext(), "Wybranych: " + listOfSelectedFriends.size(), Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
                 // Opcja gdy użytkownik nic nie wybierze
             }
+        }
+    }
+
+
+    private boolean textFieldsValid() {
+
+        String expense_name = mExpenseName.getEditText().getText().toString();
+        String amount = mAmount.getEditText().getText().toString();
+
+        if (!TextUtils.isEmpty(expense_name)
+                && (!TextUtils.isEmpty(amount))) {
+
+            return true;
+
+
+        } else {
+
+            Toast.makeText(ExpenseAdderActivity.this, "Uzupełnij puste pola!", Toast.LENGTH_SHORT).show();
+            return false;
         }
     }
 

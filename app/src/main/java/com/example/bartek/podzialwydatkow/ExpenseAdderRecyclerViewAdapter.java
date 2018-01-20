@@ -19,11 +19,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ExpenseAdderRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseAdderRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Friends> listOfFriends;
-    private Double moneyToShare;
+    private Double moneyForPayer;
 
-    public ExpenseAdderRecyclerViewAdapter(ArrayList<Friends> listOfFriends, Double moneyToShare) {
+    public ExpenseAdderRecyclerViewAdapter(ArrayList<Friends> listOfFriends, Double moneyForPayer) {
         this.listOfFriends = listOfFriends;
-        this.moneyToShare = moneyToShare;
+        this.moneyForPayer = moneyForPayer;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ExpenseAdderRecyclerViewAdapter extends RecyclerView.Adapter<Expens
     public void onBindViewHolder(ViewHolder holder, int position) {
         Friends payer = listOfFriends.get(position);
         // Obliczamy dług
-        String payerDebtValue = String.valueOf(moneyToShare / listOfFriends.size());
+        String payerDebtValue = String.format("%.2f", moneyForPayer);
         // Bindingi do elementów UI
         holder.payerName.setText(payer.name);
         holder.payerEmail.setText(payer.email);
