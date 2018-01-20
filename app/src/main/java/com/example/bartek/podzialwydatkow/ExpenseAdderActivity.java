@@ -34,7 +34,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
     // LOCAL DATA
     private ArrayList<Friends> listOfSelectedFriends = new ArrayList<>();
-    private Double price = 0.0;
+    private Double amountAsDouble = 0.0;
     private String user_id;
     private Friends currentUser = null;
 
@@ -58,7 +58,6 @@ public class ExpenseAdderActivity extends AppCompatActivity {
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mCurrentUserName;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +75,6 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         mAddProgress.show();
         mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses").child(user_id).child("expense").push();
 
-
-
         HashMap<String, String> expenseMap = new HashMap<>();
         final String key = mExpensesDatabase.getKey().toString();
         expenseMap.put("expensename", expensename);
@@ -94,7 +91,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                     HashMap<String, Double> mapOfDebtors = new HashMap<>();
 
                     for (Friends debtor : listOfDebtors) {
-                        mapOfDebtors.put(debtor.getUser_id(), price / listOfDebtors.size());
+                        mapOfDebtors.put(debtor.getUser_id(), amountAsDouble / listOfDebtors.size());
                     }
 
                     // Wrzucamy na Firebase
@@ -105,6 +102,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                             // Jak dodało dłużników to jest okej
                             if (task.isSuccessful()) {
                                 mAddProgress.dismiss();
+                                finish();
                             }
 
                         }
@@ -208,7 +206,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                             .toString();
 
                     //FIXME: Nie mam pojęcia czym jest expensekey
-                    currentUser = new Friends(user_name, user_email, user_image, "");
+                    currentUser = new Friends(user_name, user_email, user_id, user_image, "", amountAsDouble / listOfSelectedFriends.size());
 
                 }
             }
@@ -231,7 +229,7 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
                 String expense_name = mExpenseName.getEditText().getText().toString();
                 String amount = mAmount.getEditText().getText().toString();
-                price = Double.valueOf(amount);
+                amountAsDouble = Double.valueOf(amount);
 
                 if (textFieldsValid()) add_expense(expense_name, amount, listOfSelectedFriends);
 
@@ -260,10 +258,11 @@ public class ExpenseAdderActivity extends AppCompatActivity {
 
                 if (textFieldsValid()) {
 
+                    amountAsDouble = Double.valueOf(mAmount.getEditText().getText().toString());
+                    currentUser.amount = amountAsDouble;
                     listOfSelectedFriends.clear();
                     listOfSelectedFriends.add(currentUser);
-                    price = Double.valueOf(mAmount.getEditText().getText().toString());
-                    recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends, price));
+                    recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends));
 
                 }
             }
@@ -278,17 +277,21 @@ public class ExpenseAdderActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Łapiemy wartość z zamkniętej aktywności
                 listOfSelectedFriends = (ArrayList<Friends>) data.getExtras().getSerializable("selectedUsers");
-                // Łapiemy wartość zpola ceny
-                price = Double.valueOf(mAmount.getEditText().getText().toString());
-                recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends, price / listOfSelectedFriends.size()));
 
+                // Przypisujemy każdemu dług
+                Double sharedPrice = Double.valueOf(mAmount.getEditText().getText().toString()) / listOfSelectedFriends.size();
+                for (Friends friend : listOfSelectedFriends) {
+                    friend.amount = sharedPrice;
+                }
+
+                // Aktualizujemy listę
+                recyclerView.setAdapter(new ExpenseAdderRecyclerViewAdapter(listOfSelectedFriends));
                 Toast.makeText(getApplicationContext(), "Wybranych: " + listOfSelectedFriends.size(), Toast.LENGTH_LONG).show();
             } else if (resultCode == RESULT_CANCELED) {
                 // Opcja gdy użytkownik nic nie wybierze
             }
         }
     }
-
 
     private boolean textFieldsValid() {
 

@@ -11,7 +11,7 @@ public class Friends implements java.io.Serializable {
     public String thumb_image;
     public String user_id;
     public String expensekey;
-    public String amount;
+    public Double amount;
 
 
 
@@ -23,15 +23,14 @@ public class Friends implements java.io.Serializable {
 
     }
 
-    public Friends(String name, String email, String user_id, String expensekey /*Integer intdebtorscounter*/) {  //Konstruktory
+    public Friends(String name, String email, String user_id, String thumb_image, String expensekey, Double ammount) {  //Konstruktory
 
         this.name = name;
         this.email = email;
         this.thumb_image = thumb_image;
         this.user_id = user_id;
         this.expensekey = expensekey;
-        //this.intdebtorscounter = intdebtorscounter;
-
+        this.amount = ammount;
     }
 
 
@@ -71,10 +70,11 @@ public class Friends implements java.io.Serializable {
     public void setExpensekey(String expensekey) {this.expensekey = expensekey;}
 
 
-    public String getAmount() {
+    public Double getAmount() {
         return amount;
     }
-    public void setAmount(String amount) {
+
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

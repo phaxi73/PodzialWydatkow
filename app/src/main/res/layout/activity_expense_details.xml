@@ -93,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/debtors_list"
+        android:id="@+id/recyclerView_expense_details"
         android:layout_width="382dp"
         android:layout_height="280dp"
         android:layout_marginBottom="32dp"
@@ -102,7 +102,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/payer_single_layout" />
 
     <Button
         android:id="@+id/expense_details_delete"

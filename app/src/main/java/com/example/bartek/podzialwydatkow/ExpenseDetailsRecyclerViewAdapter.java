@@ -16,11 +16,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by igor on 19.01.18.
  */
 
-public class ExpenseAdderRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseAdderRecyclerViewAdapter.ViewHolder> {
+public class ExpenseDetailsRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseDetailsRecyclerViewAdapter.ViewHolder> {
 
     private ArrayList<Friends> listOfFriends;
 
-    public ExpenseAdderRecyclerViewAdapter(ArrayList<Friends> listOfFriends) {
+    public ExpenseDetailsRecyclerViewAdapter(ArrayList<Friends> listOfFriends) {
         this.listOfFriends = listOfFriends;
     }
 
