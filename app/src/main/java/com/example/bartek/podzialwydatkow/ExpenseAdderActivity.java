@@ -71,36 +71,45 @@ public class ExpenseAdderActivity extends AppCompatActivity {
         bindOnClickListeners();
     }
 
-    private void add_expense (final String expensename, final String amount, String user_name) {
+    private void add_expense(final String expensename, final String amount, final ArrayList<Friends> listOfDebtors) {
 
-
-        FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-        final String uid  = current_user.getUid();
-
-        mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses").child(uid).child("expense").push();
+        mAddProgress.show();
+        mExpensesDatabase = FirebaseDatabase.getInstance().getReference().child("Expenses").child(user_id).child("expense").push();
 
 
 
         HashMap<String, String> expenseMap = new HashMap<>();
         final String key = mExpensesDatabase.getKey().toString();
-        String testname = expenseMap.put("expensename", expensename);
-        String testamount = expenseMap.put("amount", amount);
-        String testpayer = expenseMap.put("payer", user_name);
+        expenseMap.put("expensename", expensename);
+        expenseMap.put("payer", currentUser.name);
+        expenseMap.put("amount", amount);
 
+        // Ustawiamy początkowo dane wydatku
         mExpensesDatabase.setValue(expenseMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-
+                // Jeżeli się uda, dodajemy dłuzników
                 if(task.isSuccessful()){
 
-                    //mAddProgress.dismiss();
+                    HashMap<String, Double> mapOfDebtors = new HashMap<>();
 
-                    Intent benefactivity = new Intent(ExpenseAdderActivity.this, BenefListActivity.class);
-                    benefactivity.putExtra("expensename", expensename);
-                    benefactivity.putExtra("expensekey", key);
-                    benefactivity.putExtra("userid", uid);
-                    benefactivity.putExtra("amount", amount);
-                    startActivity(benefactivity);
+                    for (Friends debtor : listOfDebtors) {
+                        mapOfDebtors.put(debtor.getUser_id(), price / listOfDebtors.size());
+                    }
+
+                    // Wrzucamy na Firebase
+                    mExpensesDatabase.child("debtor").setValue(mapOfDebtors).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            // Jak dodało dłużników to jest okej
+                            if (task.isSuccessful()) {
+                                mAddProgress.dismiss();
+                            }
+
+                        }
+                    });
+
 
                 }
 
@@ -223,9 +232,8 @@ public class ExpenseAdderActivity extends AppCompatActivity {
                 String expense_name = mExpenseName.getEditText().getText().toString();
                 String amount = mAmount.getEditText().getText().toString();
                 price = Double.valueOf(amount);
-                String user_name = mPayerTxt.getText().toString();
 
-                if (textFieldsValid()) add_expense(expense_name, amount, user_name);
+                if (textFieldsValid()) add_expense(expense_name, amount, listOfSelectedFriends);
 
             }
         });
