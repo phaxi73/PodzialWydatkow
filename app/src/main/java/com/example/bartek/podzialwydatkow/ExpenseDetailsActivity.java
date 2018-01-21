@@ -139,7 +139,7 @@ public class ExpenseDetailsActivity extends AppCompatActivity {
 
     private void setupDebtors() {
         final ArrayList<Friends> listOfDebtors = new ArrayList<>();
-        mDebtorsList.setAdapter(new ExpenseDetailsRecyclerViewAdapter(listOfDebtors));
+        mDebtorsList.setAdapter(new ExpenseDetailsRecyclerViewAdapter(listOfDebtors, this));
 
         mExpenseKeyDatabase.child("debtor").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

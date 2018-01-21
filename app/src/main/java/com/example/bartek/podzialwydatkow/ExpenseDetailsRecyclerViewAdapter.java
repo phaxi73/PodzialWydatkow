@@ -1,10 +1,12 @@
 package com.example.bartek.podzialwydatkow;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -22,9 +24,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ExpenseDetailsRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseDetailsRecyclerViewAdapter.ViewHolder> {
 
     public ArrayList<Friends> listOfFriends;
+    public Context context;
 
-    public ExpenseDetailsRecyclerViewAdapter(ArrayList<Friends> listOfFriends) {
+    public ExpenseDetailsRecyclerViewAdapter(ArrayList<Friends> listOfFriends, Context context) {
         this.listOfFriends = listOfFriends;
+        this.context = context;
     }
 
     @Override
@@ -78,6 +82,8 @@ public class ExpenseDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Expe
 
                 listOfFriends.remove(debtor);
                 notifyDataSetChanged();
+                //TODO: TOAST JEST TUTAJ ;-) ~ Igor
+                Toast.makeText(context, "Usunięto " + debtor.name + " z listy dłużników!", Toast.LENGTH_LONG).show();
             }
         };
     }
